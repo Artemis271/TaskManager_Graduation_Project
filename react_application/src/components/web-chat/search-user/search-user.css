@@ -1,0 +1,99 @@
+.search-box {
+    width: 1.5rem;
+    height: 40px;
+    padding: 0 1rem;
+    background: #80d0b2;
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    transition: width 0.3s ease, opacity .3s ease;
+}
+
+.search-box:hover {
+    width: 100%;
+}
+
+.search-box .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+#add-user-to-chat {
+    flex: 1;
+    margin-left: 0.5rem;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 20px;
+    font-weight: normal;
+    transition: opacity .3s ease;
+}
+
+#add-user-to-chat:focus {
+    outline: none;
+    box-shadow: none;
+    color: #282c34;
+}
+
+.suggested-user {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-rows: .6fr;
+    justify-items: center;
+    align-items: center;
+    background-color: #e1e1e1;
+    border-radius: .5em;
+    box-shadow: 0 0 2px 1px rgba(34, 60, 80, 0.2);
+}
+
+.user-search-username {
+    padding: 0 1em;
+    overflow-y: auto;
+}
+
+.suggested-options {
+    position: absolute;
+    display: none;
+    flex-direction: column;
+    row-gap: .5em;
+    z-index: 10;
+    top: 5.3rem;
+}
+
+.search-box:focus-within .suggested-options {
+    display: flex;
+}
+
+.search-box:hover .suggested-options {
+    display: flex;
+}
+
+.suggested-user-avatar {
+    width: 70px;
+    height: 70px;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.add-user-to-chat-button-wrapper {
+    display: flex;
+    justify-self: stretch;
+    align-self: stretch;
+    opacity: 0;
+    transition: opacity .5s ease;
+    align-items: center;
+    justify-content: center;
+}
+
+.add-user-to-chat-button {
+    cursor: pointer;
+    display: flex;
+}
+
+.add-user-to-chat-button-wrapper:hover {
+    opacity: 1;
+}

@@ -1,0 +1,242 @@
+services:
+  kafka-1:
+    image: apache/kafka:latest
+    container_name: kafka-1
+    ports:
+      - "${KAFKA_1_PORT}:9092"
+    environment:
+      KAFKA_NODE_ID: 1
+      CLUSTER_ID: ${KAFKA_CLUSTER_ID}
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka-1:9091,2@kafka-2:9091
+      KAFKA_LISTENERS: PLAINTEXT://:9090,CONTROLLER://:9091,EXTERNAL://:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-1:9090,EXTERNAL://${HOSTNAME:-localhost}:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+    volumes:
+      - kafka-1_data:/var/lib/kafka/data
+
+  kafka-2:
+    image: apache/kafka:latest
+    container_name: kafka-2
+    ports:
+      - "${KAFKA_2_PORT}:9094"
+    environment:
+      KAFKA_NODE_ID: 2
+      CLUSTER_ID: ${KAFKA_CLUSTER_ID}
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka-1:9091,2@kafka-2:9091
+      KAFKA_LISTENERS: PLAINTEXT://:9090,CONTROLLER://:9091,EXTERNAL://:9094
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-2:9090,EXTERNAL://${HOSTNAME:-localhost}:9094
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+    volumes:
+      - kafka-2_data:/var/lib/kafka/data
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    restart: "no"
+    ports:
+      - "${MONGO_PORT}:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_INITDB_DATABASE: web-chat
+    healthcheck:
+      test: echo 'db.runCommand({serverStatus:1}).ok' | mongosh admin -u $$MONGO_INITDB_ROOT_USERNAME -p $$MONGO_INITDB_ROOT_PASSWORD --quiet | grep 1
+      interval: 10s
+      timeout: 5s
+      start_period: 10s
+      retries: 5
+
+  mongo-express:
+    image: mongo-express:latest
+    container_name: mongo-express
+    restart: "no"
+    ports:
+      - "${MONGO_EXPRESS_PORT}:8081"
+    environment:
+      ME_CONFIG_BASICAUTH_USERNAME: ${MONGO_USERNAME}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${MONGO_PASSWORD}
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@mongo:27017/
+
+  redis:
+    image: redis:latest
+    container_name: redis-cache
+    ports:
+      - "${REDIS_PORT}:6379"
+
+  postgres:
+    container_name: postgres
+    image: postgres:17
+    restart: "no"
+    ports:
+      - "${PG_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker-db-init:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_USER: ${PG_USER:-postgres}
+      POSTGRES_PASSWORD: ${PG_PASSWORD:-postgres}
+      POSTGRES_DB: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PG_USER:-postgres} -d postgres"]
+      interval: 10s
+      timeout: 5s
+      start_period: 15s
+      retries: 5
+
+  gateway:
+    container_name: gateway
+    build: ./Gateway
+    ports:
+      - "${GATEWAY_PORT:-8080}:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - AUTH_HOST=auth
+      - AUTH_PORT=8084
+      - CHAT_HOST=chat
+      - CHAT_PORT=8083
+      - PROJECT_HOST=project
+      - PROJECT_PORT=8082
+      - TASK_HOST=task
+      - TASK_PORT=8081
+
+  auth:
+    container_name: auth-service
+    build:
+      context: .
+      dockerfile: AuthService/Dockerfile
+    ports:
+      - "${AUTH_PORT:-8084}:8084"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/Auth
+      - SPRING_DATASOURCE_USERNAME=${PG_USERNAME:-postgres}
+      - SPRING_DATASOURCE_PASSWORD=${PG_PASSWORD:-postgres}
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka-1:9090,kafka-2:9090
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_LIFETIME=${JWT_LIFETIME:-7d}
+      - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
+      - GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - YANDEX_CLIENT_ID=${YANDEX_CLIENT_ID}
+      - YANDEX_CLIENT_SECRET=${YANDEX_CLIENT_SECRET}
+      - GATEWAY_HOST=localhost
+      - GATEWAY_PORT=8080
+      - BOOTSTRAP_HOST_1=kafka-1
+      - BOOTSTRAP_PORT_1=9090
+      - BOOTSTRAP_HOST_2=kafka-2
+      - BOOTSTRAP_PORT_2=9090
+    depends_on:
+      postgres:
+        condition: service_healthy
+      kafka-1:
+        condition: service_started
+      kafka-2:
+        condition: service_started
+
+  chat:
+    container_name: chat-service
+    build:
+      context: .
+      dockerfile: ChatService/Dockerfile
+    ports:
+      - "${CHAT_PORT:-8083}:8083"
+    environment:
+      - MONGO_HOST=${MONGO_HOST}
+      - MONGO_PORT=${MONGO_PORT}
+      - MONGO_USERNAME=${MONGO_USERNAME}
+      - MONGO_PASSWORD=${MONGO_PASSWORD}
+      - REDIS_HOST=redis
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka-1:9090,kafka-2:9090
+      - BOOTSTRAP_HOST_1=kafka-1
+      - BOOTSTRAP_PORT_1=9090
+      - BOOTSTRAP_HOST_2=kafka-2
+      - BOOTSTRAP_PORT_2=9090
+    depends_on:
+      - mongo
+      - redis
+      - kafka-1
+      - kafka-2
+
+  project:
+    container_name: project-service
+    build:
+      context: .
+      dockerfile: ProjectService/Dockerfile
+    ports:
+      - "${PROJECT_PORT:-8082}:8082"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/Project
+      - SPRING_DATASOURCE_USERNAME=${PG_USERNAME:-postgres}
+      - SPRING_DATASOURCE_PASSWORD=${PG_PASSWORD:-postgres}
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka-1:9090,kafka-2:9090
+      - BOOTSTRAP_HOST_1=kafka-1
+      - BOOTSTRAP_PORT_1=9090
+      - BOOTSTRAP_HOST_2=kafka-2
+      - BOOTSTRAP_PORT_2=9090
+    depends_on:
+      postgres:
+        condition: service_healthy
+      kafka-1:
+        condition: service_started
+      kafka-2:
+        condition: service_started
+
+  task:
+    container_name: task-service
+    build:
+      context: .
+      dockerfile: TaskService/Dockerfile
+    ports:
+      - "${TASK_PORT:-8081}:8081"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/Task
+      - SPRING_DATASOURCE_USERNAME=${PG_USERNAME:-postgres}
+      - SPRING_DATASOURCE_PASSWORD=${PG_PASSWORD:-postgres}
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka-1:9090,kafka-2:9090
+      - BOOTSTRAP_HOST_1=kafka-1
+      - BOOTSTRAP_PORT_1=9090
+      - BOOTSTRAP_HOST_2=kafka-2
+      - BOOTSTRAP_PORT_2=9090
+    depends_on:
+      postgres:
+        condition: service_healthy
+      kafka-1:
+        condition: service_started
+      kafka-2:
+        condition: service_started
+
+  react-application:
+    build: ./react_application
+    ports:
+      - "${REACT_PORT:-3000}:3000"
+    environment:
+      - REACT_APP_OAUTH2_SERVICES_NAME_LIST=Yandex,Google,Github
+      - REACT_APP_OAUTH2_SERVICES_LINK_LIST=yandex-icon.png,google-icon.png,github-icon.png
+      - REACT_APP_OAUTH2_SERVICES_URI_LIST=/yandex,/google,/github
+      - REACT_APP_WEBSOCKET_URL=${WEBSOCKET_URL:-http://localhost:8083/ws}
+      - REACT_APP_BACKEND_PROJECT_SERVICE_HOST=${BACKEND_HOST:-localhost}
+      - REACT_APP_BACKEND_HOST=${BACKEND_HOST:-localhost}
+      - REACT_APP_BACKEND_PORT=${BACKEND_PORT:-8080}
+
+volumes:
+  kafka-1_data:
+  kafka-2_data:
+  mongodb_data:
+  postgres_data:

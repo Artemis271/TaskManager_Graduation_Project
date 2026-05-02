@@ -1,0 +1,224 @@
+.project-page-main {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    width: 97%;
+}
+
+.project-sidebar {
+    z-index: 500;
+    position: fixed;
+    margin-right: 1.5em;
+    padding: 0 2em;
+    border: #282c34 solid;
+    border-radius: 1em;
+    height: calc(100% - 100px);
+    width: 13%;
+    background-color: #f4f3f3;
+}
+
+.project-sidebar > ul {
+    list-style: none;
+    padding: 0;
+    font-size: large;
+    margin: 1em 0;
+}
+
+.project-sidebar ul li {
+    padding: .5em 1em;
+    transition: background-color 0.5s ease;
+    border-radius: 7px;
+    margin-bottom: .3em;
+}
+
+.project-sidebar ul a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.project-sidebar ul li:hover, .react-autosuggest__suggestion:hover {
+    background-color: #80d0b2;
+    cursor: pointer;
+}
+
+.task-navbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+    gap: 2rem;
+    margin-bottom: 2em;
+    padding: 0 2em 1em 2em;
+    align-items: center;
+}
+
+.project-page-main-1 {
+    grid-column: 2;
+}
+
+.task-navbar > button {
+    margin: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.task-navbar > button > svg {
+    font-size: xx-large;
+}
+
+#project-search {
+    width: 100%;
+    padding: .7em 0 .7em 5px;
+    font-size: math;
+}
+
+#task-search, #task-status-sort,
+#task-importance-sort {
+    padding: .5em 0 .5em 5px;
+    font-size: unset;
+}
+
+.project-page-label {
+    display: inline;
+    padding: 0;
+}
+
+.project-empty {
+    display: flex;
+    justify-content: center;
+}
+
+.project-page-wrapper-empty {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.project-page-container {
+    gap: 2em 1.5em;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+/*React autosuggest*/
+.react-autosuggest__suggestions-list {
+    list-style: none;
+    padding: .3em;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    z-index: 100;
+    background-color: #e8e8e8;
+    gap: 0.5em;
+    border-radius: 0.5em;
+    margin: 0;
+    box-shadow: 4px 4px 8px 0 rgba(34, 60, 80, 0.2);
+}
+
+.react-autosuggest__container {
+    position: relative;
+}
+
+.react-autosuggest__suggestion {
+    border-radius: 5px;
+    padding: .5em 0;
+    transition: background-color 0.5s ease;
+    cursor: pointer;
+}
+
+.react-autosuggest__suggestion > div {
+    padding-left: 0.5em;
+}
+
+#task-status-sort, #task-importance-sort {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: .5em;
+    background-color: white;
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+#task-status-sort:hover, #task-importance-sort:hover {
+    border-color: #888;
+}
+
+#task-status-sort:focus, #task-importance-sort:focus {
+    border-color: #4b9b7e;
+    box-shadow: 0 0 0 2px rgba(75, 155, 126, 0.5);
+}
+
+#task-status-sort option {
+    cursor: pointer;
+    padding: 8px;
+    background-color: white;
+    color: #333;
+}
+
+#task-status-sort option[value=""], #task-importance-sort option[value=""] {
+    color: #999;
+}
+
+.toggle-wrapper {
+    display: flex;
+    column-gap: 5px;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    border-radius: .5em;
+    box-shadow: 0 1px 1px rgb(255 255 255 / .6);
+    font-size: 1em;
+}
+
+.toggle-checkbox {
+    appearance: none;
+    position: absolute;
+    z-index: 1;
+    border-radius: inherit;
+    width: 100%;
+    height: 100%;
+    font: inherit;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.toggle-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    border-radius: .375em;
+    width: 3em;
+    height: 1.5em;
+    background-color: #f3f3f3;
+    box-shadow: inset 0 0 .0625em .125em rgb(255 255 255 / .2),
+    inset 0 .0625em .125em rgb(0 0 0 / .4);
+    transition: background-color .4s linear;
+}
+
+.toggle-checkbox:checked + .toggle-container {
+    background-color: #80d0b2;
+}
+
+.toggle-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: .0625em;
+    border-radius: .3125em;
+    width: 1.375em;
+    height: 1.375em;
+    background-color: #e8e8e8;
+    box-shadow: inset 0 -.0625em .0625em .125em rgb(0 0 0 / .1),
+    inset 0 -.125em .0625em rgb(0 0 0 / .2), inset 0 .1875em .0625em rgb(255 255 255 / .3),
+    0 .125em .125em rgb(0 0 0 / .5);
+    transition: left .4s;
+}
+
+.toggle-checkbox:checked + .toggle-container > .toggle-button {
+    left: 1.5625em;
+}

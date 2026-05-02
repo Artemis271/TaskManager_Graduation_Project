@@ -1,0 +1,86 @@
+.register-form-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-form h2 {
+    text-align: center;
+}
+
+.login-form > div {
+    padding: 0 1em 1em 1em;
+}
+
+.form-error {
+    color: red;
+}
+
+.register-container a {
+    text-decoration: none;
+    transition: color 0.5s ease;
+}
+
+.register-container a:hover {
+    color: #80d0b2;
+}
+
+.password-inputs {
+    display: flex;
+    gap: 0 1em;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.password-inputs-1, .password-inputs-2 {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.avatar-form-group {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.avatar-drop-button {
+    display: flex;
+    flex-grow: 1;
+    justify-content: flex-end;
+}
+
+.field-error {
+    color: red;
+}
+
+.password-inner-wrapper {
+    display: flex;
+    position: relative;
+    align-items: center;
+}
+
+.password-inner-wrapper > button {
+    padding: 1px 3px;
+    margin: 13px 0 13px 1px;
+}
+
+.password-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.registration-password-toggle-icon {
+    position: absolute;
+    display: flex;
+    line-height: 1;
+    cursor: pointer;
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 1.2rem;
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%);
+}

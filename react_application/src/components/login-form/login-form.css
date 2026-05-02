@@ -1,0 +1,59 @@
+.login-form-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.password-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+input[type=text] {
+    padding: .8em;
+    font-size: medium;
+}
+
+input[type=password], #password, #confirm-password {
+    padding: .8em 40px .8em .8em;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: medium;
+}
+
+.password-toggle-icon {
+    position: absolute;
+    display: flex;
+    top: 56%;
+    right: 2rem;
+    line-height: 1;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: rgba(0,0,0,0.6);
+    font-size: 1.2rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-form h2 {
+    text-align: center;
+}
+
+.login-form > div {
+    padding: 0 1em 1em 1em;
+}
+
+.form-error {
+    color: red;
+}
+
+.register-container a {
+    text-decoration: none;
+    transition: color 0.5s ease;
+}
+
+.register-container a:hover {
+    color: #80d0b2;
+}

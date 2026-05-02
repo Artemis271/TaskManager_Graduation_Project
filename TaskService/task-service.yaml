@@ -1,0 +1,445 @@
+openapi: 3.0.3
+info:
+  title: Task service в Task Manager
+  description: Описание эндпоинтов для сервиса задач в Task Manager
+  version: 1.0.0
+servers:
+  - url: 'http:localhost:8081'
+paths:
+  /tasks/allTasks:
+    get:
+      tags:
+        - Получение всех задач проекта
+      summary: Получение всех задач проекта по ID
+      parameters:
+        - name: projectId
+          in: query
+          required: true
+          description: ID проекта
+          example: '03b5fc81-2749-40df-94f5-1e74beafc953'
+          schema:
+            type: string
+            format: uuid
+        - name: pageNumber
+          in: query
+          required: false
+          description: Номер страницы данных
+          example: 2
+          schema:
+            type: integer
+            format: int32
+        - name: size
+          in: query
+          required: false
+          description: Размер загружаемой страницы данных
+          example: 15
+          schema:
+            type: integer
+            format: int32
+      responses:
+        200:
+          description: Данные успешно загружены
+          content:
+            application/json:
+              schema:
+                type: array
+                example: [ { Object1 }, { Object2 }, { Object3 } ]
+
+  /tasks/allTasks-ProjectIds:
+    get:
+      tags:
+        - Получение всех задач для набора проектов
+      summary: Получение всех задач для массива проектов
+      parameters:
+        - name: uuids
+          in: query
+          required: true
+          description: ID проектов
+          example: [ '03b5fc81-2749-40df-94f5-1e74beafc953', '04b5sc11-2759-40df-94j5-1e74bshfc114' ]
+          schema:
+            type: array
+            format: uuid
+      responses:
+        200:
+          description: Данные успешно загружены
+          content:
+            application/json:
+              schema:
+                type: array
+                example: [ { Object1 }, { Object2 }, { Object3 } ]
+
+  /tasks/allTasksByName:
+    get:
+      tags:
+        - Получение всех задач по имени
+      parameters:
+        - name: name
+          in: query
+          required: true
+          description: Название задачи
+          example: Моя первая задача
+          schema:
+            type: string
+        - name: pageNumber
+          in: query
+          required: false
+          description: Номер страницы данных
+          example: 2
+          schema:
+            type: integer
+            format: int32
+        - name: size
+          in: query
+          required: false
+          description: Размер загружаемой страницы данных
+          example: 15
+          schema:
+            type: integer
+            format: int32
+      responses:
+        200:
+          description: Данные успешно загружены
+          content:
+            application/json:
+              schema:
+                type: array
+                example: [ { Object1 }, { Object2 }, { Object3 } ]
+
+  /tasks/allTasksByImportance:
+    get:
+      tags:
+        - Получение всех задач по важности
+      parameters:
+        - name: importance
+          in: query
+          required: true
+          description: Важность задачи
+          example: LOW
+          schema:
+            type: string
+            enum:
+              - LOW
+              - INTERMEDIATE
+              - HIGH
+        - name: pageNumber
+          in: query
+          required: false
+          description: Номер страницы данных
+          example: 2
+          schema:
+            type: integer
+            format: int32
+        - name: size
+          in: query
+          required: false
+          description: Размер загружаемой страницы данных
+          example: 15
+          schema:
+            type: integer
+            format: int32
+      responses:
+        200:
+          description: Данные успешно загружены
+          content:
+            application/json:
+              schema:
+                type: array
+                example: [ { Object1 }, { Object2 }, { Object3 } ]
+
+  /tasks/allTasksByStatus:
+    get:
+      tags:
+        - Получение всех задач по статусу
+      parameters:
+        - name: status
+          in: query
+          required: true
+          description: Статус задачи
+          example: IN_PROGRESS
+          schema:
+            type: string
+            enum:
+              - PLANING
+              - IN_PROGRESS
+              - COMPLETED
+              - CANCELED
+              - EXPIRED
+        - name: pageNumber
+          in: query
+          required: false
+          description: Номер страницы данных
+          example: 2
+          schema:
+            type: integer
+            format: int32
+        - name: size
+          in: query
+          required: false
+          description: Размер загружаемой страницы данных
+          example: 15
+          schema:
+            type: integer
+            format: int32
+      responses:
+        200:
+          description: Данные успешно загружены
+          content:
+            application/json:
+              schema:
+                type: array
+                example: [ { Object1 }, { Object2 }, { Object3 } ]
+
+  /tasks/{id}:
+    get:
+      tags:
+        - Получение задачи по ID
+      summary: Получение конкретной задачи
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Уникальный идентификатор задачи
+          example: '03b5fc81-2749-40df-94f5-1e74beafc953'
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Проект успешно найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDto'
+        404:
+          description: Такой задачи нет
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestResponse404'
+
+  /tasks/createTask:
+    post:
+      tags:
+        - Создание новой задачи
+      requestBody:
+        description: Данные новой задачи
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskInputDto'
+        required: true
+      responses:
+        201:
+          description: Проект успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDto'
+
+  /tasks/update/{id}:
+    patch:
+      tags:
+        - Обновление данных задачи по ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Уникальный ID задачи
+          example: '03b5fc81-2749-40df-94f5-1e74beafc953'
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Новые данные проекта
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskUpdateDto'
+        required: true
+      responses:
+        200:
+          description: Задача успешно обновлена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDto'
+        404:
+          description: Такой задачи нет
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestResponse404'
+
+  /tasks/delete/{id}:
+    delete:
+      tags:
+        - Удаление задачи по ID
+      summary: Удаление задачи по её идентификатору
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Уникальный ID задачи
+          example: '03b5fc81-2749-40df-94f5-1e74beafc953'
+          schema:
+            type: string
+            format: uuid
+      responses:
+        204:
+          description: Задача успешно удалена
+        404:
+          description: Такой задачи нет
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestResponse404'
+
+  /tasks/allTaskImportance:
+    get:
+      tags:
+        - Получение списка важностей задач
+      responses:
+        200:
+          description: Важности задач отправлены
+          content:
+            application/json:
+              schema:
+                type: array
+                example: [ 'LOW', 'INTERMEDIATE', 'HIGH' ]
+
+  /tasks/allTaskStatus:
+    get:
+      tags:
+        - Получение списка статусов задач
+      responses:
+        200:
+          description: Статусы задач отправлены
+          content:
+            application/json:
+              schema:
+                type: array
+                example: [ 'PLANING', 'IN_PROGRESS', 'COMPLETED', 'CANCELED', 'EXPIRED' ]
+
+components:
+  schemas:
+    TaskDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: '03b5fc81-2749-40df-94f5-1e74beafc953'
+        name:
+          type: string
+          example: 'Моя первая задача'
+        description:
+          type: string
+          example: 'Данная задача нужна для освоения...'
+        taskImportance:
+          type: string
+          example: INTERMEDIATE
+          enum:
+            - LOW
+            - INTERMEDIATE
+            - HIGH
+        taskStatus:
+          type: string
+          example: PLANING
+          enum:
+            - PLANING
+            - IN_PROGRESS
+            - COMPLETED
+            - CANCELED
+            - EXPIRED
+
+    TaskInputDto:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'Моя первая задача'
+        description:
+          type: string
+          example: 'Данная задача нужна для освоения...'
+        taskImportance:
+          type: string
+          example: INTERMEDIATE
+          enum:
+            - LOW
+            - INTERMEDIATE
+            - HIGH
+        taskStatus:
+          type: string
+          example: PLANING
+          enum:
+            - PLANING
+            - IN_PROGRESS
+            - COMPLETED
+            - CANCELED
+            - EXPIRED
+        dateFinished:
+          type: integer
+          format: int64
+          example: 2025-01-01
+        images:
+          type: array
+          example: [ { AvatarObject1 }, { AvatarObject2 }, { AvatarObject3 } ]
+          required: false
+        projectId:
+          type: string
+          format: uuid
+          example: '03b5fc81-2749-40df-94f5-1e74beafc953'
+
+    TaskUpdateDto:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'Моя первая задача'
+        description:
+          type: string
+          example: 'Данная задача нужна для освоения...'
+        taskImportance:
+          type: string
+          example: INTERMEDIATE
+          enum:
+            - LOW
+            - INTERMEDIATE
+            - HIGH
+        taskStatus:
+          type: string
+          example: PLANING
+          enum:
+            - PLANING
+            - IN_PROGRESS
+            - COMPLETED
+            - CANCELED
+            - EXPIRED
+        dateFinished:
+          type: integer
+          format: int64
+          example: 2025-01-01
+        isFinished:
+          type: boolean
+          example: false
+
+    RestResponse404:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 404
+        status:
+          type: string
+          enum:
+            - OK
+            - BAD_REQUEST
+            - I_AM_TEAPOT
+            - FORBIDDEN
+        timestamp:
+          type: integer
+          format: int64
+          example: 2025-05-09T17:49:48.946
+        message:
+          type: string
+          example: The entity with id=1 not found

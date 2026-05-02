@@ -1,0 +1,58 @@
+server:
+  port: ${GATEWAY_PORT:8080}
+
+routes:
+  allow-origin:
+    ${ALLOW_ORIGIN:http://localhost:3000}
+  open-endpoints:
+    - /auth/login
+    - /auth/registration
+    - /oauth2/authorization
+    - /login/oauth2/code
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: task-service
+          uri: http://${TASK_HOST:localhost}:${TASK_PORT:8081}
+          predicates:
+            - Path=/api/tasks/**
+          filters:
+            - StripPrefix=1
+            - name: AuthFilter
+
+        - id: project-service
+          uri: http://${PROJECT_HOST:localhost}:${PROJECT_PORT:8082}
+          predicates:
+            - Path=/api/projects/**
+          filters:
+            - StripPrefix=1
+            - name: AuthFilter
+
+        - id: chat-service
+          uri: http://${CHAT_HOST:localhost}:${CHAT_PORT:8083}
+          predicates:
+            - Path=/api/chat/**
+          filters:
+            - StripPrefix=1
+            - name: AuthFilter
+
+        - id: auth-service
+          uri: http://${AUTH_HOST:localhost}:${AUTH_PORT:8084}
+          predicates:
+            - Path=/api/auth/**, /api/oauth2/**, /api/login/oauth2/code/**
+          filters:
+            - StripPrefix=1
+            - name: AuthFilter
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always

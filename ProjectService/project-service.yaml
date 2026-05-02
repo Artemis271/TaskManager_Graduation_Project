@@ -1,0 +1,235 @@
+openapi: 3.0.3
+info:
+  title: Project service в Task-Manager
+  description: Описание эндпоинтов для сервиса проектов в Task Manager
+  version: 1.0.0
+servers:
+  - url: 'http:localhost:8082'
+paths:
+  /projects/allProjects:
+    get:
+      tags:
+        - Получение всех проектов пользователя
+      summary: Получение всех проектов для конкретного пользователя
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          description: Уникальный идентификатор пользователя
+          example: 1
+          schema:
+            type: integer
+            format: int64
+        - name: pageNumber
+          in: query
+          required: false
+          description: Номер страницы данных
+          example: 2
+          schema:
+            type: integer
+            format: int32
+        - name: size
+          in: query
+          required: false
+          description: Размер загружаемой страницы данных
+          example: 15
+          schema:
+            type: integer
+            format: int32
+      responses:
+        200:
+          description: Данные успешно загружены
+          content:
+            application/json:
+              schema:
+                type: array
+                example: [ { Object1 }, { Object2 }, { Object3 } ]
+
+  /projects/{id}:
+    get:
+      tags:
+        - Получение проекта по ID
+      summary: Получение конкретного проекта
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Уникальный идентификатор проекта
+          example: '03b5fc81-2749-40df-94f5-1e74beafc953'
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Проект успешно найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectDto'
+        404:
+          description: Такого проекта нет
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestResponse404'
+
+  /projects/createProject:
+    post:
+      tags:
+        - Создание нового проекта
+      summary: Создание нового проекта для задач
+      requestBody:
+        description: Данные нового проекта
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectInputDto'
+        required: true
+      responses:
+        201:
+          description: Проект успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectDto'
+
+  /projects/update/{id}:
+    patch:
+      tags:
+        - Обновление данных проекта по ID
+      summary: Обновление имени, аватара, описания проекта
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Уникальный ID проекта
+          example: '03b5fc81-2749-40df-94f5-1e74beafc953'
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Новые данные проекта
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectUpdateDto'
+        required: true
+      responses:
+        200:
+          description: Проект успешно обновлён
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectDto'
+        404:
+          description: Такого проекта нет
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestResponse404'
+
+  /projects/delete/{id}:
+    delete:
+      tags:
+        - Удаление проекта по ID
+      summary: Удаление проекта и каскадное удаление всех связанных задач
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Уникальный ID проекта
+          example: '03b5fc81-2749-40df-94f5-1e74beafc953'
+          schema:
+            type: string
+            format: uuid
+      responses:
+        204:
+          description: Проект и все его данные успешно удалены
+        404:
+          description: Такого проекта нет
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestResponse404'
+
+components:
+  schemas:
+    ProjectDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: '03b5fc81-2749-40df-94f5-1e74beafc953'
+        name:
+          type: string
+          example: Мой первый проект
+        description:
+          type: string
+          example: Проект нужен для развития...
+        dateAdded:
+          type: integer
+          format: int64
+          example: 2025-01-01
+        dateUpdated:
+          type: integer
+          format: int64
+          example: 2025-01-01
+        avatars:
+          type: array
+          example: [ { AvatarObject1 }, { AvatarObject2 }, { AvatarObject3 } ]
+          required: false
+
+    ProjectInputDto:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Мой первый проект
+        description:
+          type: string
+          example: Проект нужен для развития...
+        avatars:
+          type: array
+          example: [ { AvatarObject1 }, { AvatarObject2 }, { AvatarObject3 } ]
+          required: false
+        userId:
+          type: integer
+          format: int64
+          example: 1
+          description: Владелец/создатель проекта
+
+    ProjectUpdateDto:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Мой первый проект
+        description:
+          type: string
+          example: Проект нужен для развития...
+        avatars:
+          type: array
+          example: [ { AvatarObject1 }, { AvatarObject2 }, { AvatarObject3 } ]
+          required: false
+
+    RestResponse404:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 404
+        status:
+          type: string
+          enum:
+            - OK
+            - BAD_REQUEST
+            - I_AM_TEAPOT
+            - FORBIDDEN
+        timestamp:
+          type: integer
+          format: int64
+          example: 2025-05-09T17:49:48.946
+        message:
+          type: string
+          example: The entity with id=1 not found

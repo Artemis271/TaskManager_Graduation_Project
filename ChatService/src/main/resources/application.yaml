@@ -1,0 +1,42 @@
+server:
+  port: ${CHAT_PORT:8083}
+
+websocket:
+  endpoints: /ws
+  allow-origins: ${ALLOW_ORIGIN:http://localhost:3000}
+  application-destination-prefix: ${WEBSOCKET_APP_PREFIX:/app}
+  broker-destination-prefix: ${WEBSOCKET_BROKER_PREFIX:/topic}
+  user-destination-prefix: ${WEBSOCKET_USER_PREFIX:/user}
+
+spring:
+  application:
+    name: chat-service
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+  data:
+    mongodb:
+      uri: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/${MONGO_DATABASE:web-chat}?authSource=admin&retryWrites=false
+      auto-index-creation: true
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+
+  cache:
+    type: redis
+    redis:
+      cache-null-values: false
+      time-to-live: 600
+
+  kafka:
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      bootstrap-servers: ${BOOTSTRAP_HOST_1:localhost}:${BOOTSTRAP_PORT_1:9092},${BOOTSTRAP_HOST_2:localhost}:${BOOTSTRAP_PORT_2:9094}
+      isolation-level: READ_COMMITTED
+      properties:
+        spring.json.trusted.packages: com.yuranium.core.events
+        spring.json.use.type.headers: true

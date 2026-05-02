@@ -1,0 +1,49 @@
+.my-team-container {
+    margin: 0 30%;
+    padding: 1rem;
+    border-radius: 1rem;
+    background-color: #ececec;
+    box-shadow: 0 7px 45px 25px rgba(133, 133, 133, 0.25);
+}
+
+.my-team-header {
+    color: #666;;
+}
+
+.current-member {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    border-radius: 1rem;
+    margin-bottom: .5rem;
+    background-color: #e5e5e5;
+    transition: box-shadow .5s ease;
+}
+
+.current-member:hover {
+    box-shadow: 0 0 0 3px rgba(133, 133, 133, 0.25);
+}
+
+ .current-member span {
+     font-size: x-large;
+     color: #80d0b2;
+     font-weight: bolder;
+     margin-left: 2rem;
+ }
+
+.member-avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    cursor: pointer;
+    object-fit: cover;
+    object-position: center;
+    image-rendering: auto;
+    padding: 10px;
+}
+
+.member-username {
+    font-weight: bold;
+    font-size: x-large;
+    color: #5c799d;
+}

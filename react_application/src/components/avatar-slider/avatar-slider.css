@@ -1,0 +1,50 @@
+.avatar-slider-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 255px;
+}
+
+.slider-arrow {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #333;
+    padding: 0;
+}
+
+.slider-arrow:disabled {
+    opacity: 0.3;
+    cursor: pointer;
+}
+
+.avatar-upload {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    text-align: center;
+    opacity: .6;
+    font-weight: bolder;
+    z-index: 10;
+}
+
+.avatar-upload input {
+    display: none;
+}
+
+.avatar-upload label {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.image-user-avatar {
+    object-position: center;
+    image-rendering: auto;
+    max-height: 900px;
+    border-radius: 10px;
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    object-fit: contain;
+}

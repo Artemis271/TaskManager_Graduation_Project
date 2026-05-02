@@ -1,0 +1,50 @@
+.infograf-main {
+    padding: 2em 10%;
+}
+
+.charts {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 10em;
+    width: 100%;
+}
+
+canvas {
+    display: inline-block !important;
+}
+
+.chart-description {
+    color: dimgray;
+    font-weight: bold;
+    margin: 0;
+    padding: 1em 0;
+    text-align: center;
+}
+
+.chart {
+    width: 48%;
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(7.6px);
+    background: rgba(187, 187, 187, 0.3);
+    -webkit-backdrop-filter: blur(7.6px);
+}
+
+.pie {
+    width: 35%;
+}
+
+.bar, .line {
+    flex-grow: 1
+}
+
+.importance {
+    width: 44%;
+}
+
+.line {
+    width: 44%;
+}

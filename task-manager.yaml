@@ -1,0 +1,1311 @@
+openapi: 3.0.3
+info:
+  title: Task-Manager
+  description: |-
+    Централизованный доступ к API к любому сервису Task Manager. Все запросы проходят через
+    API Gateway. Для обеспечения безопасности, все запросы дополнительно валидируются на наличие
+    Authorization хедера, где это необходимо
+    
+    Ссылки:
+    - [Репозиторий проекта TaskManager](https://github.com/Yuranium/TaskManager)
+  version: 1.0.0
+  license:
+    name: MIT license
+    url: https://opensource.org/license/mit
+servers:
+  - url: 'http://localhost:8080/api'
+paths:
+  /auth/validate:
+    post:
+      tags:
+        - JWT валидация
+      summary: Валидация входящего JWT токена
+      description: Валидация входящего JWT токена в хедерах запроса
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: JWT токен
+          example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Токен корректный
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthValidationResponse'
+        401:
+          description: Токен некорректный
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthValidationResponse'
+      security:
+        - task_manager_auth:
+            - task_manager_auth
+
+  /auth/login:
+    post:
+      tags:
+        - Авторизация пользователя
+      summary: Авторизация пользователя в системе
+      requestBody:
+        description: Логин и пароль пользователя
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLoginDto'
+        required: true
+      responses:
+        '200':
+          description: Пользователь найден в системе и успешно авторизован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedJwt'
+        401:
+          description: Некорректные входные данные
+          content:
+            application/json:
+              schema:
+              # добавить
+        404:
+          description: Пользователь не найден в системе
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedJwt'
+
+  /auth/registration:
+    post:
+      tags:
+        - Регистрация нового пользователя
+      summary: Регистрация нового пользователя в системе
+      requestBody:
+        description: Данные пользователя при регистрации
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInputDto'
+        required: true
+      responses:
+        201:
+          description: Пользователь успешно зарегистрирован
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+        400:
+          description: Такой пользователь уже есть в системе
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestResponse400'
+
+  /auth/user/{id}:
+    get:
+      tags:
+        - Получение юзера по ID
+      summary: Просмотр аккаунта конкретного пользователя
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Уникальный идентификатор пользователя
+          schema:
+            type: integer
+            format: int64
+        - name: Authorization
+          in: header
+          required: true
+          description: JWT токен
+          example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+          schema:
+            type: string
+      responses:
+        200:
+          description: Пользователь есть в системе
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfoDto'
+        401:
+          description: Токен некорректный
+          content:
+            application/json:
+              schema:
+              # добавить
+        404:
+          description: Такого пользователя нет
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestResponse404'
+      security:
+        - task_manager_auth:
+            - task_manager_auth
+
+  /auth/user/update/{id}:
+    patch:
+      tags:
+        - Обновление данных пользователя по ID
+      summary: Обновление данных профиля пользователя
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Уникальный идентификатор пользователя
+          schema:
+            type: integer
+            format: int64
+        - name: Authorization
+          in: header
+          required: true
+          description: JWT токен
+          example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+          schema:
+            type: string
+      requestBody:
+        description: Новые данные пользователя
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateDto'
+        required: true
+      responses:
+        200:
+          description: Данные пользователя успешно обновлены
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+        401:
+          description: Токен некорректный
+          content:
+            application/json:
+              schema:
+              # добавить
+        404:
+          description: Такого пользователя нет
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestResponse404'
+      security:
+        - task_manager_auth:
+            - task_manager_auth
+
+  /auth/user/{id}/update-avatar:
+    patch:
+      tags:
+        - Обновление аватара пользователя по ID
+      summary: Обновление аватара пользователя и добавление к текущим аватарам
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Уникальный идентификатор пользователя
+          schema:
+            type: integer
+            format: int64
+        - name: Authorization
+          in: header
+          required: true
+          description: JWT токен
+          example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+          schema:
+            type: string
+      requestBody:
+        description: Новая файл аватара пользователя
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MultipartFile'
+        required: true
+      responses:
+        200:
+          description: Аватар пользователя успешно обновлён
+
+        401:
+          description: Токен некорректный
+          content:
+            application/json:
+              schema:
+              # добавить
+        404:
+          description: Такого пользователя нет
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestResponse404'
+      security:
+        - task_manager_auth:
+            - task_manager_auth
+
+  /auth/user/delete/{id}:
+    delete:
+      tags:
+        - Удаление аккаунта пользователя по ID
+      summary: Удаление профиля пользователя из системы
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Уникальный идентификатор пользователя
+          schema:
+            type: integer
+            format: int64
+        - name: Authorization
+          in: header
+          required: true
+          description: JWT токен
+          example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+          schema:
+            type: string
+      responses:
+        204:
+          description: Пользователь и все его данные успешно удалены
+        401:
+          description: Токен некорректный
+          content:
+            application/json:
+              schema:
+                # добавить
+        404:
+          description: Такого пользователя нет
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestResponse404'
+      security:
+        - task_manager_auth:
+            - task_manager_auth
+
+  /projects/allProjects:
+    get:
+      tags:
+        - Получение всех проектов пользователя
+      summary: Получение всех проектов для конкретного пользователя
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          description: Уникальный идентификатор пользователя
+          example: 1
+          schema:
+            type: integer
+            format: int64
+        - name: pageNumber
+          in: query
+          required: false
+          description: Номер страницы данных
+          example: 2
+          schema:
+            type: integer
+            format: int32
+        - name: size
+          in: query
+          required: false
+          description: Размер загружаемой страницы данных
+          example: 15
+          schema:
+            type: integer
+            format: int32
+      responses:
+        200:
+          description: Данные успешно загружены
+          content:
+            application/json:
+              schema:
+                type: array
+                example: [{Object1}, {Object2}, {Object3}]
+
+  /projects/{id}:
+    get:
+      tags:
+        - Получение проекта по ID
+      summary: Получение конкретного проекта
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Уникальный идентификатор проекта
+          example: '03b5fc81-2749-40df-94f5-1e74beafc953'
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Проект успешно найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectDto'
+        404:
+          description: Такого проекта нет
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestResponse404'
+
+  /projects/createProject:
+    post:
+      tags:
+        - Создание нового проекта
+      summary: Создание нового проекта для задач
+      requestBody:
+        description: Данные нового проекта
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectInputDto'
+        required: true
+      responses:
+        201:
+          description: Проект успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectDto'
+
+  /projects/update/{id}:
+    patch:
+      tags:
+        - Обновление данных проекта по ID
+      summary: Обновление имени, аватара, описания проекта
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Уникальный ID проекта
+          example: '03b5fc81-2749-40df-94f5-1e74beafc953'
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Новые данные проекта
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectUpdateDto'
+        required: true
+      responses:
+        200:
+          description: Проект успешно обновлён
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectDto'
+        404:
+          description: Такого проекта нет
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestResponse404'
+
+  /projects/delete/{id}:
+    delete:
+      tags:
+        - Удаление проекта по ID
+      summary: Удаление проекта и каскадное удаление всех связанных задач
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Уникальный ID проекта
+          example: '03b5fc81-2749-40df-94f5-1e74beafc953'
+          schema:
+            type: string
+            format: uuid
+      responses:
+        204:
+          description: Проект и все его данные успешно удалены
+        404:
+          description: Такого проекта нет
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestResponse404'
+
+  /tasks/allTasks:
+    get:
+      tags:
+        - Получение всех задач проекта
+      summary: Получение всех задач проекта по ID
+      parameters:
+        - name: projectId
+          in: query
+          required: true
+          description: ID проекта
+          example: '03b5fc81-2749-40df-94f5-1e74beafc953'
+          schema:
+            type: string
+            format: uuid
+        - name: pageNumber
+          in: query
+          required: false
+          description: Номер страницы данных
+          example: 2
+          schema:
+            type: integer
+            format: int32
+        - name: size
+          in: query
+          required: false
+          description: Размер загружаемой страницы данных
+          example: 15
+          schema:
+            type: integer
+            format: int32
+      responses:
+        200:
+          description: Данные успешно загружены
+          content:
+            application/json:
+              schema:
+                type: array
+                example: [ { Object1 }, { Object2 }, { Object3 } ]
+
+  /tasks/allTasks-ProjectIds:
+    get:
+      tags:
+        - Получение всех задач для набора проектов
+      summary: Получение всех задач для массива проектов
+      parameters:
+        - name: uuids
+          in: query
+          required: true
+          description: ID проектов
+          example: ['03b5fc81-2749-40df-94f5-1e74beafc953', '04b5sc11-2759-40df-94j5-1e74bshfc114']
+          schema:
+            type: array
+            format: uuid
+      responses:
+        200:
+          description: Данные успешно загружены
+          content:
+            application/json:
+              schema:
+                type: array
+                example: [ { Object1 }, { Object2 }, { Object3 } ]
+
+  /tasks/allTasksByName:
+    get:
+      tags:
+        - Получение всех задач по имени
+      parameters:
+        - name: name
+          in: query
+          required: true
+          description: Название задачи
+          example: Моя первая задача
+          schema:
+            type: string
+        - name: pageNumber
+          in: query
+          required: false
+          description: Номер страницы данных
+          example: 2
+          schema:
+            type: integer
+            format: int32
+        - name: size
+          in: query
+          required: false
+          description: Размер загружаемой страницы данных
+          example: 15
+          schema:
+            type: integer
+            format: int32
+      responses:
+        200:
+          description: Данные успешно загружены
+          content:
+            application/json:
+              schema:
+                type: array
+                example: [ { Object1 }, { Object2 }, { Object3 } ]
+
+  /tasks/allTasksByImportance:
+    get:
+      tags:
+        - Получение всех задач по важности
+      parameters:
+        - name: importance
+          in: query
+          required: true
+          description: Важность задачи
+          example: LOW
+          schema:
+            type: string
+            enum:
+              - LOW
+              - INTERMEDIATE
+              - HIGH
+        - name: pageNumber
+          in: query
+          required: false
+          description: Номер страницы данных
+          example: 2
+          schema:
+            type: integer
+            format: int32
+        - name: size
+          in: query
+          required: false
+          description: Размер загружаемой страницы данных
+          example: 15
+          schema:
+            type: integer
+            format: int32
+      responses:
+        200:
+          description: Данные успешно загружены
+          content:
+            application/json:
+              schema:
+                type: array
+                example: [ { Object1 }, { Object2 }, { Object3 } ]
+
+  /tasks/allTasksByStatus:
+    get:
+      tags:
+        - Получение всех задач по статусу
+      parameters:
+        - name: status
+          in: query
+          required: true
+          description: Статус задачи
+          example: IN_PROGRESS
+          schema:
+            type: string
+            enum:
+              - PLANING
+              - IN_PROGRESS
+              - COMPLETED
+              - CANCELED
+              - EXPIRED
+        - name: pageNumber
+          in: query
+          required: false
+          description: Номер страницы данных
+          example: 2
+          schema:
+            type: integer
+            format: int32
+        - name: size
+          in: query
+          required: false
+          description: Размер загружаемой страницы данных
+          example: 15
+          schema:
+            type: integer
+            format: int32
+      responses:
+        200:
+          description: Данные успешно загружены
+          content:
+            application/json:
+              schema:
+                type: array
+                example: [ { Object1 }, { Object2 }, { Object3 } ]
+
+  /tasks/{id}:
+    get:
+      tags:
+        - Получение задачи по ID
+      summary: Получение конкретной задачи
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Уникальный идентификатор задачи
+          example: '03b5fc81-2749-40df-94f5-1e74beafc953'
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Проект успешно найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDto'
+        404:
+          description: Такой задачи нет
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestResponse404'
+
+  /tasks/createTask:
+    post:
+      tags:
+        - Создание новой задачи
+      requestBody:
+        description: Данные новой задачи
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskInputDto'
+        required: true
+      responses:
+        201:
+          description: Проект успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDto'
+
+  /tasks/update/{id}:
+    patch:
+      tags:
+        - Обновление данных задачи по ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Уникальный ID задачи
+          example: '03b5fc81-2749-40df-94f5-1e74beafc953'
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Новые данные проекта
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskUpdateDto'
+        required: true
+      responses:
+        200:
+          description: Задача успешно обновлена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskDto'
+        404:
+          description: Такой задачи нет
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestResponse404'
+
+  /tasks/delete/{id}:
+    delete:
+      tags:
+        - Удаление задачи по ID
+      summary: Удаление задачи по её идентификатору
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Уникальный ID задачи
+          example: '03b5fc81-2749-40df-94f5-1e74beafc953'
+          schema:
+            type: string
+            format: uuid
+      responses:
+        204:
+          description: Задача успешно удалена
+        404:
+          description: Такой задачи нет
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestResponse404'
+
+  /tasks/allTaskImportance:
+    get:
+      tags:
+        - Получение списка важностей задач
+      responses:
+        200:
+          description: Важности задач отправлены
+          content:
+            application/json:
+              schema:
+                type: array
+                example: ['LOW', 'INTERMEDIATE', 'HIGH']
+
+  /tasks/allTaskStatus:
+    get:
+      tags:
+        - Получение списка статусов задач
+      responses:
+        200:
+          description: Статусы задач отправлены
+          content:
+            application/json:
+              schema:
+                type: array
+                example: [ 'PLANING', 'IN_PROGRESS', 'COMPLETED', 'CANCELED', 'EXPIRED' ]
+
+  /chat/user/search:
+    get:
+      tags:
+        - Получение всех пользователей
+      summary: Поиск всех пользователей по неполному юзернейму
+      parameters:
+        - name: inputUsername
+          in: query
+          required: true
+          description: Подстрока юзернейма для поиска
+          example: 'Yurani'
+          schema:
+            type: string
+        - name: pageNumber
+          in: query
+          required: false
+          description: Номер страницы данных
+          example: 2
+          schema:
+            type: integer
+            format: int32
+        - name: size
+          in: query
+          required: false
+          description: Размер загружаемой страницы данных
+          example: 15
+          schema:
+            type: integer
+            format: int32
+      responses:
+        200:
+          description: Данные успешно загружены
+          content:
+            application/json:
+              schema:
+                type: array
+                example: [ { Object1 }, { Object2 }, { Object3 } ]
+
+  /chat/user/my-team:
+    get:
+      tags:
+        - Получение всех пользователей, состоящих в команде
+      summary: Получение всех пользователей, состоящих в команде для данного пользователя
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          description: Уникальный ID пользователя
+          example: 1
+          schema:
+            type: integer
+            format: int64
+        - name: pageNumber
+          in: query
+          required: false
+          description: Номер страницы данных
+          example: 2
+          schema:
+            type: integer
+            format: int32
+        - name: size
+          in: query
+          required: false
+          description: Размер загружаемой страницы данных
+          example: 15
+          schema:
+            type: integer
+            format: int32
+      responses:
+        200:
+          description: Данные успешно загружены
+          content:
+            application/json:
+              schema:
+                type: array
+                example: [ { Object1 }, { Object2 }, { Object3 } ]
+
+  /chat/all:
+    get:
+      tags:
+        - Получение всех чатов
+      summary: Получение всех чатов для конкретного пользователя
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          description: Уникальный ID пользователя
+          example: 1
+          schema:
+            type: integer
+            format: int64
+        - name: pageNumber
+          in: query
+          required: false
+          description: Номер страницы данных
+          example: 2
+          schema:
+            type: integer
+            format: int32
+        - name: size
+          in: query
+          required: false
+          description: Размер загружаемой страницы данных
+          example: 15
+          schema:
+            type: integer
+            format: int32
+      responses:
+        200:
+          description: Данные успешно загружены
+          content:
+            application/json:
+              schema:
+                type: array
+                example: [ { Object1 }, { Object2 }, { Object3 } ]
+
+  /chat/messages/all:
+    get:
+      tags:
+        - Получение всех сообщений
+      summary: Получение всех последних сообщений для конкретного чата
+      parameters:
+        - name: chatId
+          in: query
+          required: true
+          description: Уникальный ID чата
+          example: '03b5fc81-2749-40df-94f5-1e74beafc953'
+          schema:
+            type: string
+            format: uuid
+        - name: pageNumber
+          in: query
+          required: false
+          description: Номер страницы данных
+          example: 2
+          schema:
+            type: integer
+            format: int32
+        - name: size
+          in: query
+          required: false
+          description: Размер загружаемой страницы данных
+          example: 15
+          schema:
+            type: integer
+            format: int32
+      responses:
+        200:
+          description: Данные успешно загружены
+          content:
+            application/json:
+              schema:
+                type: array
+                example: [ { Object1 }, { Object2 }, { Object3 } ]
+
+  /chat/create-chat:
+    post:
+      tags:
+        - Создание нового чата
+      summary: Создание нового веб-чата для общения
+      parameters:
+        - name: chatTitle
+          in: query
+          required: true
+          description: Название веб-чата
+          example: 'Мой первый чат'
+          schema:
+            type: string
+        - name: ownerId
+          in: query
+          required: true
+          description: ID создателя/владельца чата
+          example: 1
+          schema:
+            type: integer
+            format: int64
+      responses:
+        201:
+          description: Чат успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatDocument'
+
+
+components:
+  schemas:
+    AuthValidationResponse:
+      type: object
+      properties:
+        valid:
+          type: boolean
+          example: true
+        userId:
+          type: integer
+          format: int64
+          example: 1
+        username:
+          type: string
+          example: example@example.com
+        roles:
+          type: array
+          example: ['ROLE_USER', 'ROLE_OWNER']
+
+    CreatedJwt:
+      type: object
+      properties:
+        token:
+          type: string
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY...'
+
+    UserDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        username:
+          type: string
+          example: 'Yuranium'
+        email:
+          type: string
+          example: example@example.com
+
+    UserLoginDto:
+      type: object
+      properties:
+        username:
+          type: string
+          example: example@example.com
+        password:
+          type: string
+          example: 'myPassword'
+
+    UserInputDto:
+      type: object
+      properties:
+        username:
+          type: string
+          example: 'Yuranium'
+        name:
+          type: string
+          example: Юрий
+          required: false
+        lastName:
+          type: string
+          example: Петров
+          required: false
+        password:
+          type: string
+          example: 'MyPassword'
+          required: true
+        email:
+          type: string
+          example: example@example.com
+          required: true
+        avatars:
+          type: array
+          example: [ { AvatarObject1 }, { AvatarObject2 }, { AvatarObject3 }]
+          required: false
+
+    RestResponse400:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 400
+        status:
+          type: string
+          enum:
+            - OK
+            - BAD_REQUEST
+            - I_AM_TEAPOT
+            - FORBIDDEN
+        timestamp:
+          type: integer
+          format: int64
+          example: 2025-05-09T17:49:48.946
+        message:
+          type: string
+          example: The required object field is missing
+
+    RestResponse404:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 404
+        status:
+          type: string
+          enum:
+            - OK
+            - BAD_REQUEST
+            - I_AM_TEAPOT
+            - FORBIDDEN
+        timestamp:
+          type: integer
+          format: int64
+          example: 2025-05-09T17:49:48.946
+        message:
+          type: string
+          example: The entity with id=1 not found
+
+    UserInfoDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        username:
+          type: string
+          example: 'Yuranium'
+        name:
+          type: string
+          example: Юрий
+          required: false
+        lastName:
+          type: string
+          example: Петров
+          required: false
+        email:
+          type: string
+          example: example@example.com
+          required: true
+        dateRegistration:
+          type: integer
+          format: int64
+          example: 2025-05-09T17:49:48.946
+        activity:
+          type: boolean
+          example: false
+        avatars:
+          type: array
+          example: [ { AvatarObject1 }, { AvatarObject2 }, { AvatarObject3 } ]
+          required: false
+        roles:
+          type: array
+          example: [ { RoleObject1 }, { RoleObject2 }, { RoleObject3 } ]
+          required: false
+
+    UserUpdateDto:
+      type: object
+      properties:
+        username:
+          type: string
+          example: 'Yuranium'
+        name:
+          type: string
+          example: Юрий
+          required: false
+        lastName:
+          type: string
+          example: Петров
+          required: false
+        avatars:
+          type: array
+          example: [ { AvatarObject1 }, { AvatarObject2 }, { AvatarObject3 } ]
+          required: false
+        roles:
+          type: array
+          example: [ { RoleObject1 }, { RoleObject2 }, { RoleObject3 } ]
+          required: false
+
+    MultipartFile:
+      type: object
+      properties:
+        originalFileName:
+          type: string
+          example: image.png
+        contentType:
+          type: string
+          example: image/jpeg
+        binaryData:
+          type: array
+          example: [12, 13, 63, 8, 21, ...]
+
+    ProjectDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: '03b5fc81-2749-40df-94f5-1e74beafc953'
+        name:
+          type: string
+          example: Мой первый проект
+        description:
+          type: string
+          example: Проект нужен для развития...
+        dateAdded:
+          type: integer
+          format: int64
+          example: 2025-01-01
+        dateUpdated:
+          type: integer
+          format: int64
+          example: 2025-01-01
+        avatars:
+          type: array
+          example: [ { AvatarObject1 }, { AvatarObject2 }, { AvatarObject3 } ]
+          required: false
+
+    ProjectInputDto:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Мой первый проект
+        description:
+          type: string
+          example: Проект нужен для развития...
+        avatars:
+          type: array
+          example: [ { AvatarObject1 }, { AvatarObject2 }, { AvatarObject3 } ]
+          required: false
+        userId:
+          type: integer
+          format: int64
+          example: 1
+          description: Владелец/создатель проекта
+
+    ProjectUpdateDto:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Мой первый проект
+        description:
+          type: string
+          example: Проект нужен для развития...
+        avatars:
+          type: array
+          example: [ { AvatarObject1 }, { AvatarObject2 }, { AvatarObject3 } ]
+          required: false
+
+    TaskDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: '03b5fc81-2749-40df-94f5-1e74beafc953'
+        name:
+          type: string
+          example: 'Моя первая задача'
+        description:
+          type: string
+          example: 'Данная задача нужна для освоения...'
+        taskImportance:
+          type: string
+          example: INTERMEDIATE
+          enum:
+            - LOW
+            - INTERMEDIATE
+            - HIGH
+        taskStatus:
+          type: string
+          example: PLANING
+          enum:
+            - PLANING
+            - IN_PROGRESS
+            - COMPLETED
+            - CANCELED
+            - EXPIRED
+
+    TaskInputDto:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'Моя первая задача'
+        description:
+          type: string
+          example: 'Данная задача нужна для освоения...'
+        taskImportance:
+          type: string
+          example: INTERMEDIATE
+          enum:
+            - LOW
+            - INTERMEDIATE
+            - HIGH
+        taskStatus:
+          type: string
+          example: PLANING
+          enum:
+            - PLANING
+            - IN_PROGRESS
+            - COMPLETED
+            - CANCELED
+            - EXPIRED
+        dateFinished:
+          type: integer
+          format: int64
+          example: 2025-01-01
+        images:
+          type: array
+          example: [ { AvatarObject1 }, { AvatarObject2 }, { AvatarObject3 } ]
+          required: false
+        projectId:
+          type: string
+          format: uuid
+          example: '03b5fc81-2749-40df-94f5-1e74beafc953'
+
+    TaskUpdateDto:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'Моя первая задача'
+        description:
+          type: string
+          example: 'Данная задача нужна для освоения...'
+        taskImportance:
+          type: string
+          example: INTERMEDIATE
+          enum:
+            - LOW
+            - INTERMEDIATE
+            - HIGH
+        taskStatus:
+          type: string
+          example: PLANING
+          enum:
+            - PLANING
+            - IN_PROGRESS
+            - COMPLETED
+            - CANCELED
+            - EXPIRED
+        dateFinished:
+          type: integer
+          format: int64
+          example: 2025-01-01
+        isFinished:
+          type: boolean
+          example: false
+
+    ChatDocument:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: '03b5fc81-2749-40df-94f5-1e74beafc953'
+        title:
+          type: string
+          example: 'Мой первый чат'
+        dateCreated:
+          type: integer
+          format: int64
+          example: 2025-05-09T17:49:48.946
+        userIds:
+          type: array
+          example: [1, 2, 3, 4, ...]
+        ownerId:
+          type: integer
+          format: int64
+          example: 1
+
+  securitySchemes:
+    task_manager_auth:
+      type: OAuth2, JWT
+      flows:
+        implicit:
+          authorizationUrl: http:localhost:8080/login, http:localhost:8080//oauth2/authorization/{provider}

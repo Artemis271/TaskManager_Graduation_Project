@@ -1,0 +1,14 @@
+.create-chat-container {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    width: 100%;
+}
+
+.create-chat-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2%;
+    padding: .5em;
+    width: 100%;
+}

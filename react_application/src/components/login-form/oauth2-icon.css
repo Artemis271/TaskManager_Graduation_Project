@@ -1,0 +1,22 @@
+.oauth2-service-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2em;
+    margin-bottom: 1em;
+}
+
+.oauth2-service-image {
+    width: 50px;
+    height: 50px;
+}
+
+.oauth2-item {
+    cursor: pointer;
+}
+
+.sign-in-with {
+    font-weight: bold;
+    text-align: center;
+}

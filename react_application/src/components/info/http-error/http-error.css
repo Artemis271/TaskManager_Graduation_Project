@@ -1,0 +1,27 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+}
+
+.http-error-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.error-container {
+    text-align: center;
+}
+
+.error-code {
+    font-size: 100px;
+    color: #dc3545;
+    margin-bottom: 20px;
+}
+
+.error-message {
+    font-size: 24px;
+    color: #dc3545;
+}

@@ -1,0 +1,215 @@
+openapi: 3.0.3
+info:
+  title: Chat service в Task-Manager
+  description: Описание эндпоинтов для чат-сервиса в Task Manager
+  version: 1.0.0
+servers:
+  - url: 'http:localhost:8083'
+paths:
+  /chat/user/search:
+    get:
+      tags:
+        - Получение всех пользователей
+      summary: Поиск всех пользователей по неполному юзернейму
+      parameters:
+        - name: inputUsername
+          in: query
+          required: true
+          description: Подстрока юзернейма для поиска
+          example: 'Yurani'
+          schema:
+            type: string
+        - name: pageNumber
+          in: query
+          required: false
+          description: Номер страницы данных
+          example: 2
+          schema:
+            type: integer
+            format: int32
+        - name: size
+          in: query
+          required: false
+          description: Размер загружаемой страницы данных
+          example: 15
+          schema:
+            type: integer
+            format: int32
+      responses:
+        200:
+          description: Данные успешно загружены
+          content:
+            application/json:
+              schema:
+                type: array
+                example: [ { Object1 }, { Object2 }, { Object3 } ]
+
+  /chat/user/my-team:
+    get:
+      tags:
+        - Получение всех пользователей, состоящих в команде
+      summary: Получение всех пользователей, состоящих в команде для данного пользователя
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          description: Уникальный ID пользователя
+          example: 1
+          schema:
+            type: integer
+            format: int64
+        - name: pageNumber
+          in: query
+          required: false
+          description: Номер страницы данных
+          example: 2
+          schema:
+            type: integer
+            format: int32
+        - name: size
+          in: query
+          required: false
+          description: Размер загружаемой страницы данных
+          example: 15
+          schema:
+            type: integer
+            format: int32
+      responses:
+        200:
+          description: Данные успешно загружены
+          content:
+            application/json:
+              schema:
+                type: array
+                example: [ { Object1 }, { Object2 }, { Object3 } ]
+
+  /chat/all:
+    get:
+      tags:
+        - Получение всех чатов
+      summary: Получение всех чатов для конкретного пользователя
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          description: Уникальный ID пользователя
+          example: 1
+          schema:
+            type: integer
+            format: int64
+        - name: pageNumber
+          in: query
+          required: false
+          description: Номер страницы данных
+          example: 2
+          schema:
+            type: integer
+            format: int32
+        - name: size
+          in: query
+          required: false
+          description: Размер загружаемой страницы данных
+          example: 15
+          schema:
+            type: integer
+            format: int32
+      responses:
+        200:
+          description: Данные успешно загружены
+          content:
+            application/json:
+              schema:
+                type: array
+                example: [ { Object1 }, { Object2 }, { Object3 } ]
+
+  /chat/messages/all:
+    get:
+      tags:
+        - Получение всех сообщений
+      summary: Получение всех последних сообщений для конкретного чата
+      parameters:
+        - name: chatId
+          in: query
+          required: true
+          description: Уникальный ID чата
+          example: '03b5fc81-2749-40df-94f5-1e74beafc953'
+          schema:
+            type: string
+            format: uuid
+        - name: pageNumber
+          in: query
+          required: false
+          description: Номер страницы данных
+          example: 2
+          schema:
+            type: integer
+            format: int32
+        - name: size
+          in: query
+          required: false
+          description: Размер загружаемой страницы данных
+          example: 15
+          schema:
+            type: integer
+            format: int32
+      responses:
+        200:
+          description: Данные успешно загружены
+          content:
+            application/json:
+              schema:
+                type: array
+                example: [ { Object1 }, { Object2 }, { Object3 } ]
+
+  /chat/create-chat:
+    post:
+      tags:
+        - Создание нового чата
+      summary: Создание нового веб-чата для общения
+      parameters:
+        - name: chatTitle
+          in: query
+          required: true
+          description: Название веб-чата
+          example: 'Мой первый чат'
+          schema:
+            type: string
+        - name: ownerId
+          in: query
+          required: true
+          description: ID создателя/владельца чата
+          example: 1
+          schema:
+            type: integer
+            format: int64
+      responses:
+        201:
+          description: Чат успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatDocument'
+
+components:
+  schemas:
+    ChatDocument:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: '03b5fc81-2749-40df-94f5-1e74beafc953'
+        title:
+          type: string
+          example: 'Мой первый чат'
+        dateCreated:
+          type: integer
+          format: int64
+          example: 2025-05-09T17:49:48.946
+        userIds:
+          type: array
+          example: [ 1, 2, 3, 4, ... ]
+        ownerId:
+          type: integer
+          format: int64
+          example: 1

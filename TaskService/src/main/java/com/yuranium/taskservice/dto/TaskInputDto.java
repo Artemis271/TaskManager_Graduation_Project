@@ -30,6 +30,8 @@ public record TaskInputDto(
 
         List<MultipartFile> images,
 
-        UUID projectId
+        UUID projectId,
+
+        Long assigneeId
 
 ) implements Serializable {}

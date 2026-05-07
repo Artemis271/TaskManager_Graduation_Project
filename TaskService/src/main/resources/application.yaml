@@ -4,6 +4,8 @@ server:
 kafka:
   topic-names:
     project-delete: project-deleted-events-topic
+    task-create: task-created-events-topic
+    task-status-changed: task-status-changed-events-topic
 
 spring:
   application:

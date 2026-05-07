@@ -1,5 +1,6 @@
 package com.yuranium.authservice.service;
 
+import com.yuranium.authservice.enums.RoleType;
 import com.yuranium.authservice.models.entity.RoleEntity;
 import com.yuranium.authservice.mapper.RoleMapper;
 import com.yuranium.authservice.repository.RoleRepository;
@@ -24,6 +25,16 @@ public class RoleService
                 .orElseThrow(
                         () -> new RoleEntityNotFoundException(
                                 String.format("Role with id=%d not found in database!", id)
+                        )
+                );
+    }
+
+    public RoleEntity getRoleByType(RoleType roleType)
+    {
+        return roleRepository.findByRole(roleType)
+                .orElseThrow(
+                        () -> new RoleEntityNotFoundException(
+                                String.format("Role %s not found in database!", roleType.name())
                         )
                 );
     }

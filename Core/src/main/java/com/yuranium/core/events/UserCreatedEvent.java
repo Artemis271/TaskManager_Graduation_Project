@@ -8,6 +8,8 @@ public record UserCreatedEvent(
 
         String username,
 
+        String email,
+
         byte[] avatarData
 
 ) implements Serializable {}

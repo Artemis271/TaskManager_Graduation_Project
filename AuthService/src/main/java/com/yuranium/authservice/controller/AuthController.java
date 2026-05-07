@@ -109,4 +109,13 @@ public class AuthController
                 HttpStatus.OK
         );
     }
+
+    @PatchMapping("/admin/restore/{id}")
+    public ResponseEntity<UserDto> restoreUser(@PathVariable Long id)
+    {
+        return new ResponseEntity<>(
+                userService.restoreUser(id),
+                HttpStatus.OK
+        );
+    }
 }

@@ -33,7 +33,9 @@ public class SecurityConfig
                                 "/auth/validate", "/login/oauth2/code/**")
                         .permitAll()
                         .requestMatchers("/auth/user/**")
-                        .authenticated())
+                        .authenticated()
+                        .requestMatchers("/auth/admin/**")
+                        .hasAuthority("ROLE_ADMIN"))
                 .oauth2Login(auth -> auth
                         .authorizationEndpoint(a -> a.baseUri("/oauth2/authorization"))
                         .redirectionEndpoint(r -> r.baseUri("/login/oauth2/code/*"))

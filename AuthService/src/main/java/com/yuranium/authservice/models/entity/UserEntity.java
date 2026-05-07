@@ -47,6 +47,9 @@ public class UserEntity
     @Column(name = "activity")
     private Boolean activity;
 
+    @Column(name = "is_deleted", nullable = false)
+    private Boolean isDeleted = false;
+
     @BatchSize(size = 15)
     @OneToMany(mappedBy = "user")
     private List<AvatarEntity> avatars = new ArrayList<>();

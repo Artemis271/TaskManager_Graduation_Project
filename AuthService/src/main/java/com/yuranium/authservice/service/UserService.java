@@ -47,7 +47,7 @@ public class UserService implements UserDetailsService
     public UserInfoDto getUser(Long id)
     {
         return userMapper.toInfoDto(
-                userRepository.findById(id)
+                userRepository.findByIdAndIsDeletedFalse(id)
                         .orElseThrow(() -> new UserEntityNotFoundException(
                                 String.format("The user with id=%d was not found!", id))
                         ));
@@ -145,17 +145,27 @@ public class UserService implements UserDetailsService
     @Transactional
     public void deleteUser(Long id)
     {
-        if (userRepository.findById(id).isPresent())
-        {
-            kafkaProducer.sendDeleteUserEvent(id);
-            userRepository.deleteById(id);
-        }
-        else throw new UserEntityNotFoundException(
-                String.format(
-                        "The user with id=%d cannot be removed because it does not exist",
-                        id
-                )
-        );
+        UserEntity userEntity = userRepository.findByIdAndIsDeletedFalse(id)
+                .orElseThrow(() -> new UserEntityNotFoundException(
+                        String.format(
+                                "The user with id=%d cannot be removed because it does not exist",
+                                id
+                        )
+                ));
+        userEntity.setIsDeleted(true);
+        kafkaProducer.sendDeleteUserEvent(id);
+        userRepository.save(userEntity);
+    }
+
+    @Transactional
+    public UserDto restoreUser(Long id)
+    {
+        UserEntity userEntity = userRepository.findById(id)
+                .orElseThrow(() -> new UserEntityNotFoundException(
+                        String.format("The user with id=%d was not found!", id)
+                ));
+        userEntity.setIsDeleted(false);
+        return userMapper.toUserDto(userRepository.save(userEntity));
     }
 
     @Override
@@ -163,7 +173,7 @@ public class UserService implements UserDetailsService
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
     {
         return new MyUserDetails(
-                userRepository.findByEmail(username)
+                userRepository.findByEmailAndIsDeletedFalse(username)
                         .orElseThrow(
                                 () -> new UsernameNotFoundException(
                                         String.format("The user with email=%s was not found!",

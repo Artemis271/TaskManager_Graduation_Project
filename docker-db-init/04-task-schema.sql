@@ -12,7 +12,8 @@ CREATE TABLE IF NOT EXISTS task(
     date_updated TIMESTAMP NOT NULL,
     date_finished DATE NOT NULL DEFAULT current_timestamp,
     finished BOOLEAN NOT NULL DEFAULT FALSE,
-    id_project UUID NOT NULL
+    id_project UUID NOT NULL,
+    assignee_id BIGINT
 );
 
 CREATE TABLE IF NOT EXISTS task_image(

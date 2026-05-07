@@ -9,6 +9,7 @@ import com.yuranium.taskservice.enums.TaskImportance;
 import com.yuranium.taskservice.enums.TaskStatus;
 import com.yuranium.taskservice.mapper.TaskMapper;
 import com.yuranium.taskservice.repository.TaskRepository;
+import com.yuranium.taskservice.sevice.kafka.KafkaProducer;
 import com.yuranium.taskservice.util.exception.TaskEntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +30,8 @@ public class TaskService
     private final TaskImageService imageService;
 
     private final TaskMapper taskMapper;
+
+    private final KafkaProducer kafkaProducer;
 
     @Transactional(readOnly = true)
     public List<TaskDto> getAll(UUID projectId)
@@ -86,21 +89,32 @@ public class TaskService
         TaskEntity task = taskMapper.toEntity(newTask);
         task.setImages(imageService.multipartToEntity(newTask.images()));
         imageService.saveAll(task.getImages());
-        return taskMapper.toDto(
-                taskRepository.save(task)
-        );
+        TaskEntity saved = taskRepository.save(task);
+        kafkaProducer.sendTaskCreatedEvent(saved);
+        return taskMapper.toDto(saved);
     }
 
     @Transactional
     public TaskDto updateTask(UUID id, TaskUpdateDto updatedTask)
     {
-        if (taskRepository.findById(id).isPresent())
-            return taskMapper.toDto(taskRepository.save(
-                    taskMapper.toEntity(updatedTask)
-            ));
-        else throw new TaskEntityNotFoundException(
-                String.format("The task with id=%s does not exist", id)
-        );
+        TaskEntity existing = taskRepository.findById(id)
+                .orElseThrow(() -> new TaskEntityNotFoundException(
+                        String.format("The task with id=%s does not exist", id)
+                ));
+        String oldStatus = existing.getTaskStatus() != null
+                ? existing.getTaskStatus().name() : null;
+
+        TaskEntity updated = taskMapper.toEntity(updatedTask);
+        updated.setId(id);
+        updated.setProjectId(existing.getProjectId());
+        updated.setAssigneeId(existing.getAssigneeId());
+        TaskEntity saved = taskRepository.save(updated);
+
+        if (updatedTask.taskStatus() != null
+                && !updatedTask.taskStatus().name().equals(oldStatus))
+            kafkaProducer.sendTaskStatusChangedEvent(saved, oldStatus);
+
+        return taskMapper.toDto(saved);
     }
 
     @Transactional

@@ -1,5 +1,6 @@
 package com.yuranium.authservice.service;
 
+import com.yuranium.authservice.enums.RoleType;
 import com.yuranium.authservice.mapper.UserMapper;
 import com.yuranium.authservice.models.MyUserDetails;
 import com.yuranium.authservice.models.dto.UserDto;
@@ -7,6 +8,7 @@ import com.yuranium.authservice.models.dto.UserInfoDto;
 import com.yuranium.authservice.models.dto.UserInputDto;
 import com.yuranium.authservice.models.dto.UserUpdateDto;
 import com.yuranium.authservice.models.entity.AvatarEntity;
+import com.yuranium.authservice.models.entity.RoleEntity;
 import com.yuranium.authservice.models.entity.UserEntity;
 import com.yuranium.authservice.repository.UserRepository;
 import com.yuranium.authservice.service.kafka.KafkaProducer;
@@ -115,6 +117,29 @@ public class UserService implements UserDetailsService
         userEntity.getAvatars().addAll(newAvatars);
         userEntity.setAvatars(userEntity.getAvatars());
         kafkaProducer.sendUpdateUserEvent(userEntity);
+    }
+
+    @Transactional
+    public UserDto assignAdminRole(Long id)
+    {
+        UserEntity userEntity = userRepository.findById(id)
+                .orElseThrow(() -> new UserEntityNotFoundException(
+                        String.format("The user with id=%d was not found!", id)
+                ));
+        RoleEntity adminRole = roleService.getRoleByType(RoleType.ROLE_ADMIN);
+        userEntity.getRoles().add(adminRole);
+        return userMapper.toUserDto(userRepository.save(userEntity));
+    }
+
+    @Transactional
+    public UserDto revokeAdminRole(Long id)
+    {
+        UserEntity userEntity = userRepository.findById(id)
+                .orElseThrow(() -> new UserEntityNotFoundException(
+                        String.format("The user with id=%d was not found!", id)
+                ));
+        userEntity.getRoles().removeIf(r -> r.getRole() == RoleType.ROLE_ADMIN);
+        return userMapper.toUserDto(userRepository.save(userEntity));
     }
 
     @Transactional

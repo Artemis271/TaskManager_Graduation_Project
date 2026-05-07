@@ -91,4 +91,22 @@ public class AuthController
         userService.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @PatchMapping("/admin/assign/{id}")
+    public ResponseEntity<UserDto> assignAdminRole(@PathVariable Long id)
+    {
+        return new ResponseEntity<>(
+                userService.assignAdminRole(id),
+                HttpStatus.OK
+        );
+    }
+
+    @PatchMapping("/admin/revoke/{id}")
+    public ResponseEntity<UserDto> revokeAdminRole(@PathVariable Long id)
+    {
+        return new ResponseEntity<>(
+                userService.revokeAdminRole(id),
+                HttpStatus.OK
+        );
+    }
 }

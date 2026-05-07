@@ -41,7 +41,8 @@ public class KafkaProducer
 
         ProducerRecord<String, Object> record = new ProducerRecord<>(
                 environment.getProperty("kafka.topic-names.user-create"),
-                new UserCreatedEvent(user.getId(), user.getUsername(), avatarData));
+                new UserCreatedEvent(user.getId(), user.getUsername(),
+                        user.getEmail(), avatarData));
 
         record.headers().add("messageId", UUID.randomUUID().toString().getBytes());
         kafkaTemplate.send(record);

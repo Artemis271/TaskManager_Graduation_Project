@@ -1,0 +1,45 @@
+server:
+  port: ${NOTIFICATION_PORT:8085}
+
+websocket:
+  endpoints: /ws-notifications
+  allow-origins: ${ALLOW_ORIGIN:http://localhost:3000}
+  application-destination-prefix: /app
+  broker-destination-prefix: /topic
+
+kafka:
+  topic-names:
+    user-create: user-created-events-topic
+    task-create: task-created-events-topic
+    task-status-changed: task-status-changed-events-topic
+
+spring:
+  application:
+    name: notification-service
+
+  data:
+    mongodb:
+      uri: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/${MONGO_DATABASE:notifications}?authSource=admin&retryWrites=false
+      auto-index-creation: true
+
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  kafka:
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      bootstrap-servers: ${BOOTSTRAP_HOST_1:localhost}:${BOOTSTRAP_PORT_1:9092},${BOOTSTRAP_HOST_2:localhost}:${BOOTSTRAP_PORT_2:9094}
+      isolation-level: READ_COMMITTED
+      properties:
+        spring.json.trusted.packages: com.yuranium.core.events
+        spring.json.use.type.headers: true

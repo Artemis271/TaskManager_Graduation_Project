@@ -8,6 +8,19 @@
     <artifactId>TaskManager</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>Core</module>
+        <module>AuthService</module>
+        <module>Gateway</module>
+        <module>ProjectService</module>
+        <module>TaskService</module>
+        <module>ChatService</module>
+        <module>NotificationService</module>
+        <module>AIService</module>
+    </modules>
+
     <properties>
         <maven.compiler.source>20</maven.compiler.source>
         <maven.compiler.target>20</maven.compiler.target>

@@ -80,35 +80,43 @@ public class TaskController
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TaskDto> getTask(@PathVariable UUID id)
+    public ResponseEntity<TaskDto> getTask(
+            @PathVariable UUID id,
+            @RequestHeader("X-User-Id") Long userId)
     {
         return new ResponseEntity<>(
-                taskService.getTask(id), HttpStatus.OK
+                taskService.getTask(id, userId), HttpStatus.OK
         );
     }
 
     @PostMapping("/createTask")
-    public ResponseEntity<?> createTask(@ModelAttribute TaskInputDto newTask)
+    public ResponseEntity<?> createTask(
+            @ModelAttribute TaskInputDto newTask,
+            @RequestHeader("X-User-Id") Long userId)
     {
         return new ResponseEntity<>(
-                taskService.createTask(newTask),
+                taskService.createTask(newTask, userId),
                 HttpStatus.CREATED
         );
     }
 
     @PatchMapping("/update/{id}")
-    public ResponseEntity<?> updateTask(@PathVariable UUID id,
-                                        @RequestBody TaskUpdateDto updatedDto)
+    public ResponseEntity<?> updateTask(
+            @PathVariable UUID id,
+            @RequestBody TaskUpdateDto updatedDto,
+            @RequestHeader("X-User-Id") Long userId)
     {
         return new ResponseEntity<>(
-                taskService.updateTask(id, updatedDto),
+                taskService.updateTask(id, updatedDto, userId),
                 HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteTask(@PathVariable UUID id)
+    public ResponseEntity<?> deleteTask(
+            @PathVariable UUID id,
+            @RequestHeader("X-User-Id") Long userId)
     {
-        taskService.deleteTask(id);
+        taskService.deleteTask(id, userId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

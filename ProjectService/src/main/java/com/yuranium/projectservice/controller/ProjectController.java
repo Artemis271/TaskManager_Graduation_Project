@@ -25,7 +25,7 @@ public class ProjectController
     public ResponseEntity<List<ProjectDto>> getAllProjects(
             @RequestParam(required = false, defaultValue = "0") int pageNumber,
             @RequestParam(required = false, defaultValue = "15") int size,
-            @RequestParam Long userId)
+            @RequestHeader("X-User-Id") Long userId)
     {
         return new ResponseEntity<>(
                 projectService.getAll(PageRequest.of(
@@ -37,38 +37,42 @@ public class ProjectController
     @GetMapping("/{id}")
     public ResponseEntity<?> getProject(
             @PathVariable UUID id,
-            @RequestHeader(value = "X-Roles", required = false) String roles)
+            @RequestHeader("X-User-Id") Long userId)
     {
-        if (roles == null || (!roles.contains("ROLE_USER") && !roles.contains("ROLE_ADMIN")))
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         return new ResponseEntity<>(
-                projectService.getProject(id), HttpStatus.OK
+                projectService.getProject(id, userId), HttpStatus.OK
         );
     }
 
     @PostMapping("/createProject")
-    public ResponseEntity<ProjectDto> createProject(@ModelAttribute ProjectInputDto newProject)
+    public ResponseEntity<ProjectDto> createProject(
+            @ModelAttribute ProjectInputDto newProject,
+            @RequestHeader("X-User-Id") Long userId)
     {
         return new ResponseEntity<>(
-                projectService.createProject(newProject),
+                projectService.createProject(newProject, userId),
                 HttpStatus.CREATED
         );
     }
 
     @PatchMapping("/update/{id}")
-    public ResponseEntity<?> updateProject(@PathVariable UUID id,
-                                        @ModelAttribute ProjectUpdateDto updatedDto)
+    public ResponseEntity<?> updateProject(
+            @PathVariable UUID id,
+            @ModelAttribute ProjectUpdateDto updatedDto,
+            @RequestHeader("X-User-Id") Long userId)
     {
         return new ResponseEntity<>(
-                projectService.updateProject(id, updatedDto),
+                projectService.updateProject(id, updatedDto, userId),
                 HttpStatus.OK
         );
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteProject(@PathVariable UUID id)
+    public ResponseEntity<?> deleteProject(
+            @PathVariable UUID id,
+            @RequestHeader("X-User-Id") Long userId)
     {
-        projectService.deleteProject(id);
+        projectService.deleteProject(id, userId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

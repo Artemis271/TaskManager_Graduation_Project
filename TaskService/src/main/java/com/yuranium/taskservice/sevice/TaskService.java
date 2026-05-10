@@ -10,6 +10,7 @@ import com.yuranium.taskservice.enums.TaskStatus;
 import com.yuranium.taskservice.mapper.TaskMapper;
 import com.yuranium.taskservice.repository.TaskRepository;
 import com.yuranium.taskservice.sevice.kafka.KafkaProducer;
+import com.yuranium.taskservice.util.exception.AccessDeniedException;
 import com.yuranium.taskservice.util.exception.TaskEntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -73,20 +74,21 @@ public class TaskService
     }
 
     @Transactional(readOnly = true)
-    public TaskDto getTask(UUID id)
+    public TaskDto getTask(UUID id, Long userId)
     {
-        return taskMapper.toDto(
-                taskRepository.findById(id)
-                        .orElseThrow(() -> new TaskEntityNotFoundException(
-                                String.format("The task with id=%s was not found!", id)
-                        ))
-        );
+        TaskEntity task = taskRepository.findById(id)
+                .orElseThrow(() -> new TaskEntityNotFoundException(
+                        String.format("The task with id=%s was not found!", id)));
+        if (!task.getOwnerId().equals(userId))
+            throw new AccessDeniedException("Access denied to task with id=" + id);
+        return taskMapper.toDto(task);
     }
 
     @Transactional
-    public TaskDto createTask(TaskInputDto newTask)
+    public TaskDto createTask(TaskInputDto newTask, Long userId)
     {
         TaskEntity task = taskMapper.toEntity(newTask);
+        task.setOwnerId(userId);
         task.setImages(imageService.multipartToEntity(newTask.images()));
         imageService.saveAll(task.getImages());
         TaskEntity saved = taskRepository.save(task);
@@ -95,12 +97,15 @@ public class TaskService
     }
 
     @Transactional
-    public TaskDto updateTask(UUID id, TaskUpdateDto updatedTask)
+    public TaskDto updateTask(UUID id, TaskUpdateDto updatedTask, Long userId)
     {
         TaskEntity existing = taskRepository.findById(id)
                 .orElseThrow(() -> new TaskEntityNotFoundException(
                         String.format("The task with id=%s does not exist", id)
                 ));
+        if (!existing.getOwnerId().equals(userId))
+            throw new AccessDeniedException("Access denied to task with id=" + id);
+
         String oldStatus = existing.getTaskStatus() != null
                 ? existing.getTaskStatus().name() : null;
 
@@ -108,6 +113,7 @@ public class TaskService
         updated.setId(id);
         updated.setProjectId(existing.getProjectId());
         updated.setAssigneeId(existing.getAssigneeId());
+        updated.setOwnerId(existing.getOwnerId());
         TaskEntity saved = taskRepository.save(updated);
 
         if (updatedTask.taskStatus() != null
@@ -118,16 +124,14 @@ public class TaskService
     }
 
     @Transactional
-    public void deleteTask(UUID id)
+    public void deleteTask(UUID id, Long userId)
     {
-        if (taskRepository.findById(id).isPresent())
-            taskRepository.deleteById(id);
-        else throw new TaskEntityNotFoundException(
-                String.format(
-                        "The task with id=%s cannot be removed because it does not exist",
-                        id
-                )
-        );
+        TaskEntity task = taskRepository.findById(id)
+                .orElseThrow(() -> new TaskEntityNotFoundException(
+                        String.format("The task with id=%s cannot be removed because it does not exist", id)));
+        if (!task.getOwnerId().equals(userId))
+            throw new AccessDeniedException("Access denied to task with id=" + id);
+        taskRepository.deleteById(id);
     }
 
     @Transactional

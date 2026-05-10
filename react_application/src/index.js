@@ -5,6 +5,7 @@ import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from "react-router-dom";
 import Navbar from "./components/navbar/navbar";
 import {AuthProvider} from "./hooks/auth";
+import {ThemeProvider} from "./hooks/useTheme";
 import {Toaster} from "react-hot-toast";
 import ErrorBoundary from "./components/error-boundary/ErrorBoundary";
 import {useAxiosErrorInterceptor} from "./hooks/useAxiosErrorInterceptor";
@@ -41,9 +42,11 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
         <ErrorBoundary>
-            <AuthProvider>
-                <AppRoot/>
-            </AuthProvider>
+            <ThemeProvider>
+                <AuthProvider>
+                    <AppRoot/>
+                </AuthProvider>
+            </ThemeProvider>
         </ErrorBoundary>
     </React.StrictMode>
 );

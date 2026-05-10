@@ -19,9 +19,12 @@ import Button from "../button/button";
 import ModalWindow from "../modal-window/modal-window";
 import WebChat from "../web-chat/web-chat";
 import MyTeam from "../account/my-team/my-team";
+import {useTheme} from "../../hooks/useTheme";
+import {MdOutlineWbSunny, MdOutlineNightlight} from "react-icons/md";
 
 export default function Navbar() {
     const {isAuthenticated, logout, user} = useAuth();
+    const {theme, toggle} = useTheme();
     const navigate = useNavigate();
 
     const handleLogout = () => {
@@ -32,14 +35,14 @@ export default function Navbar() {
     return (
         <>
             <nav className="navigation-menu">
-                <div className="svg-main-avatar">
+                <div className="navbar-brand">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M4 13H10V19H4V13Z" fill="currentColor"/>
                         <path d="M4 5H10V11H4V5Z" fill="currentColor"/>
                         <path d="M12 5H18V11H12V5Z" fill="currentColor"/>
                         <path d="M14 13H20V19H14V13Z" fill="currentColor"/>
                     </svg>
-                    <h2 className="h2-main-page">Task Manager</h2>
+                    <h2>Task Manager</h2>
                 </div>
                 <ul className="navbar">
                     <li>
@@ -120,7 +123,11 @@ export default function Navbar() {
                         </>
                     )}
                 </ul>
-
+                <div className="navbar-right">
+                    <button className="theme-toggle" onClick={toggle} title="Переключить тему">
+                        {theme === 'dark' ? <MdOutlineWbSunny/> : <MdOutlineNightlight/>}
+                    </button>
+                </div>
             </nav>
 
             <Routes>

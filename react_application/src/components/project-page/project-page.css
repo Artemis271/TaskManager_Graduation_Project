@@ -1,224 +1,278 @@
-.project-page-main {
-    display: grid;
-    grid-template-columns: 1fr 4fr;
-    width: 97%;
+.project-layout {
+    display: flex;
+    height: calc(100vh - 56px);
+    overflow: hidden;
 }
 
+/* Sidebar */
 .project-sidebar {
-    z-index: 500;
-    position: fixed;
-    margin-right: 1.5em;
-    padding: 0 2em;
-    border: #282c34 solid;
-    border-radius: 1em;
-    height: calc(100% - 100px);
-    width: 13%;
-    background-color: #f4f3f3;
+    width: 220px;
+    flex-shrink: 0;
+    background-color: var(--sidebar-bg);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    gap: 12px;
+    overflow-y: auto;
 }
 
-.project-sidebar > ul {
+.project-sidebar h3 {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.project-sidebar ul {
     list-style: none;
     padding: 0;
-    font-size: large;
-    margin: 1em 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 
 .project-sidebar ul li {
-    padding: .5em 1em;
-    transition: background-color 0.5s ease;
-    border-radius: 7px;
-    margin-bottom: .3em;
+    border-radius: var(--radius-sm);
+    transition: background-color 0.2s;
+}
+
+.project-sidebar ul li:hover {
+    background-color: var(--accent-light);
 }
 
 .project-sidebar ul a {
+    display: block;
+    padding: 7px 10px;
     text-decoration: none;
-    color: inherit;
+    color: var(--text);
+    font-size: 0.875rem;
+    border-radius: var(--radius-sm);
 }
 
-.project-sidebar ul li:hover, .react-autosuggest__suggestion:hover {
-    background-color: #80d0b2;
-    cursor: pointer;
-}
-
-.task-navbar {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    flex-wrap: nowrap;
-    gap: 2rem;
-    margin-bottom: 2em;
-    padding: 0 2em 1em 2em;
-    align-items: center;
-}
-
-.project-page-main-1 {
-    grid-column: 2;
-}
-
-.task-navbar > button {
-    margin: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-}
-
-.task-navbar > button > svg {
-    font-size: xx-large;
-}
-
-#project-search {
-    width: 100%;
-    padding: .7em 0 .7em 5px;
-    font-size: math;
-}
-
-#task-search, #task-status-sort,
-#task-importance-sort {
-    padding: .5em 0 .5em 5px;
-    font-size: unset;
-}
-
-.project-page-label {
-    display: inline;
-    padding: 0;
-}
-
-.project-empty {
-    display: flex;
-    justify-content: center;
-}
-
-.project-page-wrapper-empty {
+/* Main area */
+.project-main {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    overflow: hidden;
 }
 
-.project-page-container {
-    gap: 2em 1.5em;
+/* Toolbar */
+.task-toolbar {
     display: flex;
-    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    background-color: var(--bg-elevated);
+    border-bottom: 1px solid var(--border);
     flex-wrap: wrap;
 }
 
-/*React autosuggest*/
-.react-autosuggest__suggestions-list {
-    list-style: none;
-    padding: .3em;
-    width: 90%;
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    z-index: 100;
-    background-color: #e8e8e8;
-    gap: 0.5em;
-    border-radius: 0.5em;
+.task-toolbar .button {
     margin: 0;
-    box-shadow: 4px 4px 8px 0 rgba(34, 60, 80, 0.2);
+    padding: 6px 10px;
+    font-size: 1.1rem;
+    line-height: 1;
 }
 
-.react-autosuggest__container {
-    position: relative;
-}
-
-.react-autosuggest__suggestion {
-    border-radius: 5px;
-    padding: .5em 0;
-    transition: background-color 0.5s ease;
+.task-toolbar select {
+    padding: 6px 10px;
+    font-size: 0.875rem;
+    background-color: var(--bg-input);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
     cursor: pointer;
 }
 
-.react-autosuggest__suggestion > div {
-    padding-left: 0.5em;
-}
-
-#task-status-sort, #task-importance-sort {
-    padding: 8px 12px;
-    border: 1px solid #ccc;
-    border-radius: .5em;
-    background-color: white;
-    font-size: 16px;
-    color: #333;
-    cursor: pointer;
+.task-toolbar select:focus {
+    border-color: var(--accent);
     outline: none;
-    transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-#task-status-sort:hover, #task-importance-sort:hover {
-    border-color: #888;
-}
-
-#task-status-sort:focus, #task-importance-sort:focus {
-    border-color: #4b9b7e;
-    box-shadow: 0 0 0 2px rgba(75, 155, 126, 0.5);
-}
-
-#task-status-sort option {
-    cursor: pointer;
-    padding: 8px;
-    background-color: white;
-    color: #333;
-}
-
-#task-status-sort option[value=""], #task-importance-sort option[value=""] {
-    color: #999;
 }
 
 .toggle-wrapper {
     display: flex;
-    column-gap: 5px;
-    justify-content: center;
     align-items: center;
-    position: relative;
-    border-radius: .5em;
-    box-shadow: 0 1px 1px rgb(255 255 255 / .6);
-    font-size: 1em;
+    gap: 6px;
+    font-size: 0.875rem;
+    color: var(--text-muted);
 }
 
 .toggle-checkbox {
     appearance: none;
     position: absolute;
-    z-index: 1;
-    border-radius: inherit;
-    width: 100%;
-    height: 100%;
-    font: inherit;
     opacity: 0;
-    cursor: pointer;
+    pointer-events: none;
 }
 
 .toggle-container {
-    display: flex;
-    align-items: center;
     position: relative;
-    border-radius: .375em;
-    width: 3em;
-    height: 1.5em;
-    background-color: #f3f3f3;
-    box-shadow: inset 0 0 .0625em .125em rgb(255 255 255 / .2),
-    inset 0 .0625em .125em rgb(0 0 0 / .4);
-    transition: background-color .4s linear;
+    width: 36px;
+    height: 20px;
+    background-color: var(--border);
+    border-radius: 99px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 .toggle-checkbox:checked + .toggle-container {
-    background-color: #80d0b2;
+    background-color: var(--accent);
 }
 
 .toggle-button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     position: absolute;
-    left: .0625em;
-    border-radius: .3125em;
-    width: 1.375em;
-    height: 1.375em;
-    background-color: #e8e8e8;
-    box-shadow: inset 0 -.0625em .0625em .125em rgb(0 0 0 / .1),
-    inset 0 -.125em .0625em rgb(0 0 0 / .2), inset 0 .1875em .0625em rgb(255 255 255 / .3),
-    0 .125em .125em rgb(0 0 0 / .5);
-    transition: left .4s;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background: #fff;
+    border-radius: 50%;
+    transition: left 0.3s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
 
-.toggle-checkbox:checked + .toggle-container > .toggle-button {
-    left: 1.5625em;
+.toggle-checkbox:checked + .toggle-container .toggle-button {
+    left: 18px;
+}
+
+/* Kanban board */
+.kanban-board {
+    flex: 1;
+    display: flex;
+    gap: 14px;
+    padding: 16px 20px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    align-items: flex-start;
+}
+
+.kanban-column {
+    flex: 0 0 260px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 100%;
+}
+
+.kanban-column__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-radius: var(--radius);
+    border-left: 3px solid;
+}
+
+.kanban-column__title {
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.kanban-column__count {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 99px;
+    background: rgba(255,255,255,0.15);
+}
+
+.kanban-column__cards {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+    padding: 2px 2px 8px;
+    flex: 1;
+}
+
+/* Column color themes */
+.kanban-column--planing .kanban-column__header {
+    background: var(--col-plan-bg);
+    border-color: var(--col-plan-accent);
+}
+.kanban-column--planing .kanban-column__title { color: var(--col-plan-accent); }
+
+.kanban-column--in_progress .kanban-column__header {
+    background: var(--col-progress-bg);
+    border-color: var(--col-progress-accent);
+}
+.kanban-column--in_progress .kanban-column__title { color: var(--col-progress-accent); }
+
+.kanban-column--completed .kanban-column__header {
+    background: var(--col-done-bg);
+    border-color: var(--col-done-accent);
+}
+.kanban-column--completed .kanban-column__title { color: var(--col-done-accent); }
+
+.kanban-column--canceled .kanban-column__header {
+    background: var(--col-cancel-bg);
+    border-color: var(--col-cancel-accent);
+}
+.kanban-column--canceled .kanban-column__title { color: var(--col-cancel-accent); }
+
+.kanban-column--expired .kanban-column__header {
+    background: var(--col-expired-bg);
+    border-color: var(--col-expired-accent);
+}
+.kanban-column--expired .kanban-column__title { color: var(--col-expired-accent); }
+
+/* Empty project */
+.project-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    flex-direction: column;
+    gap: 16px;
+    color: var(--text-muted);
+}
+
+/* Autosuggest */
+.react-autosuggest__container { position: relative; }
+
+.react-autosuggest__input {
+    padding: 6px 10px;
+    font-size: 0.875rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--bg-input);
+    color: var(--text);
+    width: 180px;
+}
+
+.react-autosuggest__suggestions-list {
+    list-style: none;
+    padding: 6px;
+    position: absolute;
+    z-index: 100;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+    margin: 4px 0 0;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.react-autosuggest__suggestion {
+    padding: 7px 10px;
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    color: var(--text);
+    cursor: pointer;
+    transition: background-color 0.15s;
+}
+
+.react-autosuggest__suggestion:hover,
+.react-autosuggest__suggestion--highlighted {
+    background-color: var(--accent-light);
+    color: var(--accent);
 }

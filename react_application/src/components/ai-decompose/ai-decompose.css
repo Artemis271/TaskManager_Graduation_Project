@@ -1,0 +1,101 @@
+.ai-decompose {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 24px;
+    min-width: 480px;
+}
+
+.ai-decompose__title {
+    font-size: 1.1rem;
+    color: #e0e0e0;
+    margin: 0;
+}
+
+.ai-decompose__hint {
+    color: #888;
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+.ai-decompose__input {
+    background: #1a1a1a;
+    border: 1px solid #2e2e2e;
+    border-radius: 8px;
+    color: #e0e0e0;
+    font-size: 0.9rem;
+    padding: 10px 12px;
+    resize: vertical;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.ai-decompose__input:focus {
+    border-color: #9cdbcb;
+}
+
+.ai-decompose__results {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ai-decompose__results-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 340px;
+    overflow-y: auto;
+}
+
+.ai-decompose__task-item {
+    background: #1a1a1a;
+    border: 1px solid #2e2e2e;
+    border-radius: 8px;
+    padding: 12px 14px;
+}
+
+.ai-decompose__task-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.ai-decompose__task-name {
+    font-size: 0.9rem;
+    color: #e0e0e0;
+    font-weight: 500;
+}
+
+.ai-decompose__task-desc {
+    font-size: 0.82rem;
+    color: #888;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.ai-decompose__badge {
+    font-size: 0.72rem;
+    padding: 2px 8px;
+    border-radius: 12px;
+    white-space: nowrap;
+    font-weight: 500;
+}
+
+.ai-decompose__badge--low {
+    background: #1e3a2a;
+    color: #6fcf97;
+}
+
+.ai-decompose__badge--intermediate {
+    background: #3a2e1a;
+    color: #f2c94c;
+}
+
+.ai-decompose__badge--high {
+    background: #3a1a1a;
+    color: #eb5757;
+}

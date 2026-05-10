@@ -48,6 +48,14 @@ spring:
             - StripPrefix=1
             - name: AuthFilter
 
+        - id: ai-service
+          uri: http://${AI_HOST:localhost}:${AI_PORT:8085}
+          predicates:
+            - Path=/api/ai/**
+          filters:
+            - StripPrefix=1
+            - name: AuthFilter
+
 management:
   endpoints:
     web:

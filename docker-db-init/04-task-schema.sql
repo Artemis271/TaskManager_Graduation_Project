@@ -13,7 +13,8 @@ CREATE TABLE IF NOT EXISTS task(
     date_finished DATE NOT NULL DEFAULT current_timestamp,
     finished BOOLEAN NOT NULL DEFAULT FALSE,
     id_project UUID NOT NULL,
-    assignee_id BIGINT
+    assignee_id BIGINT,
+    owner_id BIGINT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS task_image(

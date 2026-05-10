@@ -10,6 +10,8 @@ import {useAuth} from "../../hooks/auth";
 import Button from "../button/button";
 import ModalWindow from "../modal-window/modal-window";
 import TaskForm from "../task-form/task-form";
+import AiDecompose from "../ai-decompose/AiDecompose";
+import {RiRobot2Line} from "react-icons/ri";
 
 export default function ProjectPage() {
     const {user} = useAuth();
@@ -228,6 +230,16 @@ export default function ProjectPage() {
                                     close();
                                     window.location.reload();
                                 }}
+                            />
+                        )}
+                    </ModalWindow>
+
+                    <ModalWindow
+                        trigger={<Button style={{padding: "0", margin: "0", display: "flex"}}><RiRobot2Line/></Button>}>
+                        {({close}) => (
+                            <AiDecompose
+                                projectId={projectId}
+                                onTasksCreated={() => { close(); window.location.reload(); }}
                             />
                         )}
                     </ModalWindow>

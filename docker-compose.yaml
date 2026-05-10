@@ -99,6 +99,16 @@ services:
       start_period: 15s
       retries: 5
 
+  ai:
+    container_name: ai-service
+    build:
+      context: .
+      dockerfile: AIService/Dockerfile
+    ports:
+      - "${AI_PORT:-8085}:8085"
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+
   gateway:
     container_name: gateway
     build: ./Gateway
@@ -114,6 +124,8 @@ services:
       - PROJECT_PORT=8082
       - TASK_HOST=task
       - TASK_PORT=8081
+      - AI_HOST=ai
+      - AI_PORT=8085
 
   auth:
     container_name: auth-service

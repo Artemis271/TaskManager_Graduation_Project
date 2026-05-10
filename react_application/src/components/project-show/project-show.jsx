@@ -75,7 +75,7 @@ export default function ProjectShow() {
     );
 
     return (
-        <>
+        <div className="project-show-wrapper">
             {projects.map(element =>
                 <ProjectCard
                     key={element.id}
@@ -90,6 +90,6 @@ export default function ProjectShow() {
                     </Button>
                 </div>
             )}
-        </>
+        </div>
     );
 }

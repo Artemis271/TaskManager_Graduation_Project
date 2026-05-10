@@ -59,6 +59,9 @@ public class TaskEntity
     @Column(name = "assignee_id")
     private Long assigneeId;
 
+    @Column(name = "owner_id")
+    private Long ownerId;
+
     @BatchSize(size = 15)
     @OneToMany(mappedBy = "task")
     private List<TaskImageEntity> images = new ArrayList<>();

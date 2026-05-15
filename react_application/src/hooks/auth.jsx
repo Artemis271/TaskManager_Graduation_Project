@@ -7,18 +7,30 @@ const AuthContext = createContext(null);
 const backHost = process.env.REACT_APP_BACKEND_PROJECT_SERVICE_HOST;
 const backPort = process.env.REACT_APP_BACKEND_PORT;
 
+function isTokenExpired(token) {
+    try {
+        const { exp } = jwtDecode(token);
+        return exp * 1000 < Date.now();
+    } catch {
+        return true;
+    }
+}
+
 export function AuthProvider({ children }) {
     const [token, setToken] = useState(() => {
-        if (typeof window !== 'undefined')
-            return localStorage.getItem('jwtToken');
-        return null;
+        if (typeof window === 'undefined') return null;
+        const stored = localStorage.getItem('jwtToken');
+        if (stored && isTokenExpired(stored)) {
+            localStorage.removeItem('jwtToken');
+            return null;
+        }
+        return stored;
     });
 
     const [user, setUser] = useState(() => {
         try {
             return token ? jwtDecode(token) : null;
         } catch(e) {
-            console.error('Error decoding token:', e);
             return null;
         }
     });

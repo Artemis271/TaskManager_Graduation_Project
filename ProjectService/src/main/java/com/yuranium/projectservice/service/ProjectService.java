@@ -93,6 +93,12 @@ public class ProjectService
         kafkaProducer.sendDeleteProjectEvent(id);
     }
 
+    @Transactional(readOnly = true)
+    public List<ProjectDto> getAllForAdmin()
+    {
+        return projectMapper.toDto(projectRepository.findAll());
+    }
+
     @Transactional
     public void deleteAllProject(Long userId)
     {

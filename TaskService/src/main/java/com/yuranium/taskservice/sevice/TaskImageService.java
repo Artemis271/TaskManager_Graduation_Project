@@ -25,6 +25,7 @@ public class TaskImageService
 
     public List<TaskImageEntity> multipartToEntity(List<MultipartFile> file)
     {
+        if (file == null || file.isEmpty()) return List.of();
         return file.stream()
                 .map(image -> {
                     TaskImageEntity avatar = new TaskImageEntity();

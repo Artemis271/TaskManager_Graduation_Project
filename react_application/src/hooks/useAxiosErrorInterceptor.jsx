@@ -4,7 +4,6 @@ import toast from 'react-hot-toast';
 
 const ERROR_MESSAGES = {
     400: 'Некорректный запрос',
-    401: 'Необходима авторизация',
     403: 'Доступ запрещён',
     404: 'Ресурс не найден',
     409: 'Конфликт данных',
@@ -12,7 +11,7 @@ const ERROR_MESSAGES = {
     503: 'Сервис недоступен',
 };
 
-export function useAxiosErrorInterceptor() {
+export function useAxiosErrorInterceptor(logout) {
     const interceptorId = useRef(null);
 
     useEffect(() => {
@@ -20,6 +19,11 @@ export function useAxiosErrorInterceptor() {
             response => response,
             error => {
                 const status = error?.response?.status;
+                if (status === 401) {
+                    toast.error('Сессия истекла — войдите снова');
+                    logout?.();
+                    return Promise.reject(error);
+                }
                 const serverMessage = error?.response?.data?.message;
                 const message = serverMessage || ERROR_MESSAGES[status] || 'Произошла ошибка';
                 toast.error(message);
@@ -30,5 +34,5 @@ export function useAxiosErrorInterceptor() {
         return () => {
             axios.interceptors.response.eject(interceptorId.current);
         };
-    }, []);
+    }, [logout]);
 }

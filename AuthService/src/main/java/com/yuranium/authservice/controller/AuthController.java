@@ -1,6 +1,8 @@
 package com.yuranium.authservice.controller;
 
 import com.yuranium.authservice.models.dto.*;
+
+import java.util.List;
 import com.yuranium.authservice.service.UserService;
 import com.yuranium.authservice.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -30,10 +32,10 @@ public class AuthController
     public ResponseEntity<?> validateToken(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader)
     {
-        return new ResponseEntity<>(
-                jwtUtil.isValidToken(authHeader),
-                HttpStatus.OK
-        );
+        var response = jwtUtil.isValidToken(authHeader);
+        if (!Boolean.TRUE.equals(response.valid()))
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/login")
@@ -90,6 +92,12 @@ public class AuthController
     {
         userService.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/admin/users")
+    public ResponseEntity<List<UserInfoDto>> getAllUsers()
+    {
+        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 
     @PatchMapping("/admin/assign/{id}")

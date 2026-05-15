@@ -16,7 +16,7 @@ export default function TaskForm({isEdit = false, initTaskData = {}, onSubmit, p
     const [messageError, setMessageError] = useState({
         taskName: '',
         taskPhoto: {}
-    })
+    });
 
     const fileInputRef = useRef(null);
 
@@ -38,26 +38,17 @@ export default function TaskForm({isEdit = false, initTaskData = {}, onSubmit, p
                     error: null
                 });
             } catch (error) {
-                setData(prev => ({
-                    ...prev,
-                    loading: false,
-                    error: error.message
-                }));
+                setData(prev => ({...prev, loading: false, error: error.message}));
             }
         };
 
         fetchData();
     }, []);
 
-
     const handleNewTask = async (e) => {
         e.preventDefault();
 
-        const errors = {
-            taskName: "",
-            taskPhoto: {},
-        };
-
+        const errors = { taskName: "", taskPhoto: {} };
         const formElements = e.target.elements;
         const taskNameInput = formElements.taskName;
         const taskPhotoInput = formElements.taskPhoto;
@@ -65,42 +56,50 @@ export default function TaskForm({isEdit = false, initTaskData = {}, onSubmit, p
         if (taskNameInput.value.length <= 2)
             errors.taskName = "Имя слишком короткое";
 
-        if (!taskPhotoInput.files || taskPhotoInput.files.length === 0)
-            errors.taskPhoto.photoAbsent = "Изображение обязательно для загрузки";
-        else if (taskPhotoInput.files[0].size > 5 * 1024 * 1024)
-            errors.taskPhoto.photoOverSize = "Изображение слишком большое для загрузки. Max: 5MB";
+        if (!isEdit) {
+            if (!taskPhotoInput.files || taskPhotoInput.files.length === 0)
+                errors.taskPhoto.photoAbsent = "Изображение обязательно для загрузки";
+            else if (taskPhotoInput.files[0].size > 5 * 1024 * 1024)
+                errors.taskPhoto.photoOverSize = "Изображение слишком большое. Max: 5MB";
+        } else if (taskPhotoInput.files && taskPhotoInput.files.length > 0) {
+            if (taskPhotoInput.files[0].size > 5 * 1024 * 1024)
+                errors.taskPhoto.photoOverSize = "Изображение слишком большое. Max: 5MB";
+        }
 
         setMessageError(errors);
 
         if (!errors.taskName && Object.keys(errors.taskPhoto).length === 0) {
-            const backHost = process.env.REACT_APP_BACKEND_PROJECT_SERVICE_HOST;
-            const backPort = process.env.REACT_APP_BACKEND_PORT;
-
-            const newTask = new FormData();
-            newTask.append("name", taskNameInput.value);
-            newTask.append("description", formElements.taskDescription.value);
-            newTask.append("taskImportance", formElements.taskImportance.value);
-            newTask.append("taskStatus", formElements.taskStatus.value);
-            newTask.append("dateFinished", formElements.dateFinish.value);
-            newTask.append("images", taskPhotoInput.files[0]);
-            newTask.append("projectId", projectId)
-
-            /*if (!isEdit)
-                axios.post(
-                    `http://${backHost}:${backPort}/api/tasks/createTask`,
-                    newTask,
-                    {headers: {'Content-Type': 'multipart/form-data'}}
-                )
-            else*/ await onSubmit(newTask);
+            if (isEdit) {
+                await onSubmit({
+                    name: taskNameInput.value,
+                    description: formElements.taskDescription.value,
+                    taskImportance: formElements.taskImportance.value,
+                    taskStatus: formElements.taskStatus.value,
+                    dateFinished: formElements.dateFinish.value || null,
+                });
+            } else {
+                const newTask = new FormData();
+                newTask.append("name", taskNameInput.value);
+                newTask.append("description", formElements.taskDescription.value);
+                newTask.append("taskImportance", formElements.taskImportance.value);
+                newTask.append("taskStatus", formElements.taskStatus.value);
+                newTask.append("dateFinished", formElements.dateFinish.value);
+                if (taskPhotoInput.files && taskPhotoInput.files.length > 0)
+                    newTask.append("images", taskPhotoInput.files[0]);
+                if (projectId)
+                    newTask.append("projectId", projectId);
+                await onSubmit(newTask);
+            }
         }
     };
 
     const acceptedTime = new Date().toISOString().split("T")[0];
 
     return (
-        <div className="task-form parent">
+        <div className="task-form parent" style={props.style}>
             <form method="POST" onSubmit={handleNewTask} encType="multipart/form-data" className="newTaskForm">
-                <h3>Создание новой задачи</h3>
+                <h3>{isEdit ? 'Изменить задачу' : 'Создание новой задачи'}</h3>
+
                 <div className="task-form">
                     <label htmlFor="taskName">Название задачи:</label>
                     <input
@@ -108,10 +107,12 @@ export default function TaskForm({isEdit = false, initTaskData = {}, onSubmit, p
                         id="taskName"
                         type="text"
                         name="taskName"
+                        defaultValue={initTaskData.name ?? ''}
                         required
                     />
                     {messageError.taskName && <span style={{color: "red"}}>{messageError.taskName}</span>}
                 </div>
+
                 <div className="task-form">
                     <fieldset>
                         <legend>Важность задачи</legend>
@@ -122,12 +123,14 @@ export default function TaskForm({isEdit = false, initTaskData = {}, onSubmit, p
                                     type="radio"
                                     name="taskImportance"
                                     value={item}
+                                    defaultChecked={item === initTaskData.taskImportance}
                                 />
                                 {item}
                             </label>
                         ))}
                     </fieldset>
                 </div>
+
                 <div className="task-form">
                     <fieldset>
                         <legend>Статус задачи</legend>
@@ -138,16 +141,26 @@ export default function TaskForm({isEdit = false, initTaskData = {}, onSubmit, p
                                     type="radio"
                                     name="taskStatus"
                                     value={item}
+                                    defaultChecked={item === initTaskData.taskStatus}
                                 />
                                 {item}
                             </label>
                         ))}
                     </fieldset>
                 </div>
+
                 <div className="task-form">
                     <label htmlFor="dateFinish">Дедлайн:</label>
-                    <input type="date" id="dateFinish" name="dateFinish" min={acceptedTime} required/>
+                    <input
+                        type="date"
+                        id="dateFinish"
+                        name="dateFinish"
+                        min={acceptedTime}
+                        defaultValue={initTaskData.dateFinished ?? ''}
+                        required
+                    />
                 </div>
+
                 <div className="task-form">
                     <label htmlFor="taskDescription" className="taskDescriptionLabel">
                         Описание задачи:
@@ -157,10 +170,14 @@ export default function TaskForm({isEdit = false, initTaskData = {}, onSubmit, p
                         id="taskDescription"
                         name="taskDescription"
                         rows="12"
-                    ></textarea>
+                        defaultValue={initTaskData.description ?? ''}
+                    />
                 </div>
+
                 <div className="task-form">
-                    <label htmlFor="taskPhoto">Выберите фото для задачи</label>
+                    <label htmlFor="taskPhoto">
+                        {isEdit ? 'Новое фото (необязательно)' : 'Выберите фото для задачи'}
+                    </label>
                     <input
                         id="taskPhoto"
                         type="file"
@@ -170,19 +187,19 @@ export default function TaskForm({isEdit = false, initTaskData = {}, onSubmit, p
                     />
                     <Button
                         onClickFunction={() => {
-                            if (fileInputRef.current) {
-                                fileInputRef.current.value = "";
-                            }
+                            if (fileInputRef.current) fileInputRef.current.value = "";
                         }}>
-                        Сбросить файл</Button>
+                        Сбросить файл
+                    </Button>
                     {Object.keys(messageError.taskPhoto).length > 0 &&
                         Object.keys(messageError.taskPhoto).map((key) => (
                             <div style={{color: "red"}} key={key}>{messageError.taskPhoto[key]}</div>
                         ))}
                     <p className="fileFormat">Формат файлов: PNG, JPEG, GIF</p>
                 </div>
-                <Button type="submit">Создать</Button>
+
+                <Button type="submit">{isEdit ? 'Сохранить' : 'Создать'}</Button>
             </form>
         </div>
-    )
+    );
 }

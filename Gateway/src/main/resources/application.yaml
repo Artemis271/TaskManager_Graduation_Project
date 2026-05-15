@@ -9,6 +9,9 @@ routes:
     - /auth/registration
     - /oauth2/authorization
     - /login/oauth2/code
+    - /swagger-ui
+    - /v3/api-docs
+    - /webjars
 
 spring:
   application:
@@ -55,6 +58,59 @@ spring:
           filters:
             - StripPrefix=1
             - name: AuthFilter
+
+        - id: notification-service
+          uri: http://${NOTIFICATION_HOST:localhost}:${NOTIFICATION_PORT:8086}
+          predicates:
+            - Path=/api/notifications/**, /ws-notifications/**
+          filters:
+            - StripPrefix=1
+            - name: AuthFilter
+
+        - id: auth-service-docs
+          uri: http://${AUTH_HOST:localhost}:${AUTH_PORT:8084}
+          predicates:
+            - Path=/v3/api-docs/auth
+          filters:
+            - RewritePath=/v3/api-docs/auth, /v3/api-docs
+
+        - id: task-service-docs
+          uri: http://${TASK_HOST:localhost}:${TASK_PORT:8081}
+          predicates:
+            - Path=/v3/api-docs/task
+          filters:
+            - RewritePath=/v3/api-docs/task, /v3/api-docs
+
+        - id: project-service-docs
+          uri: http://${PROJECT_HOST:localhost}:${PROJECT_PORT:8082}
+          predicates:
+            - Path=/v3/api-docs/project
+          filters:
+            - RewritePath=/v3/api-docs/project, /v3/api-docs
+
+        - id: ai-service-docs
+          uri: http://${AI_HOST:localhost}:${AI_PORT:8085}
+          predicates:
+            - Path=/v3/api-docs/ai
+          filters:
+            - RewritePath=/v3/api-docs/ai, /v3/api-docs
+
+springdoc:
+  swagger-ui:
+    config-url: /v3/api-docs/swagger-config
+    url: /v3/api-docs/swagger-config
+    disable-swagger-default-url: true
+    urls:
+      - name: Overview (TaskManager)
+        url: /v3/api-docs
+      - name: AuthService
+        url: /v3/api-docs/auth
+      - name: TaskService
+        url: /v3/api-docs/task
+      - name: ProjectService
+        url: /v3/api-docs/project
+      - name: AIService
+        url: /v3/api-docs/ai
 
 management:
   endpoints:

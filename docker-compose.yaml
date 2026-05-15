@@ -107,7 +107,7 @@ services:
     ports:
       - "${AI_PORT:-8085}:8085"
     environment:
-      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GROQ_API_KEY=${GROQ_API_KEY}
 
   gateway:
     container_name: gateway
@@ -126,6 +126,8 @@ services:
       - TASK_PORT=8081
       - AI_HOST=ai
       - AI_PORT=8085
+      - NOTIFICATION_HOST=notification
+      - NOTIFICATION_PORT=8086
 
   auth:
     container_name: auth-service
@@ -233,6 +235,33 @@ services:
         condition: service_started
       kafka-2:
         condition: service_started
+
+  notification:
+    container_name: notification-service
+    build:
+      context: .
+      dockerfile: NotificationService/Dockerfile
+    ports:
+      - "${NOTIFICATION_PORT:-8086}:8086"
+    environment:
+      - NOTIFICATION_PORT=8086
+      - MONGO_HOST=${MONGO_HOST}
+      - MONGO_PORT=${MONGO_PORT}
+      - MONGO_USERNAME=${MONGO_USERNAME}
+      - MONGO_PASSWORD=${MONGO_PASSWORD}
+      - MAIL_HOST=${MAIL_HOST:-smtp.gmail.com}
+      - MAIL_PORT=${MAIL_PORT:-587}
+      - MAIL_USERNAME=${MAIL_USERNAME}
+      - MAIL_PASSWORD=${MAIL_PASSWORD}
+      - ALLOW_ORIGIN=http://localhost:3000
+      - BOOTSTRAP_HOST_1=kafka-1
+      - BOOTSTRAP_PORT_1=9090
+      - BOOTSTRAP_HOST_2=kafka-2
+      - BOOTSTRAP_PORT_2=9090
+    depends_on:
+      - mongo
+      - kafka-1
+      - kafka-2
 
   react-application:
     build: ./react_application

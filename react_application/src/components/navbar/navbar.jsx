@@ -21,6 +21,7 @@ import WebChat from "../web-chat/web-chat";
 import MyTeam from "../account/my-team/my-team";
 import {useTheme} from "../../hooks/useTheme";
 import {MdOutlineWbSunny, MdOutlineNightlight} from "react-icons/md";
+import AdminPanel from "../admin-panel/AdminPanel";
 
 export default function Navbar() {
     const {isAuthenticated, logout, user} = useAuth();
@@ -103,6 +104,14 @@ export default function Navbar() {
                         </>
                     )}
 
+                    {isAuthenticated && user?.roles?.includes('ROLE_ADMIN') && (
+                        <li>
+                            <span className="link-wrap">
+                                <Link to="/admin">Администратор</Link>
+                            </span>
+                        </li>
+                    )}
+
                     {isAuthenticated && (
                         <>
                             <li>
@@ -144,6 +153,7 @@ export default function Navbar() {
                 <Route path="/projects/:projectId/tasks/:taskId" element={<TaskCard/>}/>
                 <Route path="/login/oauth2/code/:provider" element={<OAuth2RedirectHandler/>}/>
                 <Route path="/account/web-chat" element={<ProtectedRoute><WebChat/></ProtectedRoute>}/>
+                <Route path="/admin" element={<ProtectedRoute><AdminPanel/></ProtectedRoute>}/>
 
                 <Route path="/500" element={<Http500/>}/>
                 <Route path="/404" element={<Http404/>}/>

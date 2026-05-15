@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS task(
     status VARCHAR(20) NOT NULL CHECK(status IN('PLANING', 'IN_PROGRESS', 'COMPLETED', 'CANCELED', 'EXPIRED')),
     date_added DATE NOT NULL DEFAULT current_date,
     date_updated TIMESTAMP NOT NULL,
-    date_finished DATE NOT NULL DEFAULT current_timestamp,
+    date_finished DATE,
     finished BOOLEAN NOT NULL DEFAULT FALSE,
     id_project UUID NOT NULL,
     assignee_id BIGINT,

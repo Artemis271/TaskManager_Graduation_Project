@@ -1,5 +1,5 @@
 server:
-  port: ${NOTIFICATION_PORT:8085}
+  port: ${NOTIFICATION_PORT:8086}
 
 websocket:
   endpoints: /ws-notifications

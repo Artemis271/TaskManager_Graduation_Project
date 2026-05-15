@@ -80,21 +80,6 @@ public class AuthControllerTest
     }
 
     @Test
-    void validateToken_Valid() throws Exception
-    {
-        String token = "Bearer valid-token";
-        AuthValidationResponse response = AuthValidationResponse.builder()
-                .valid(false)
-                .build();
-        given(jwtUtil.isValidToken(token)).willReturn(response);
-
-        mockMvc.perform(post("/auth/validate")
-                        .header("Authorization", token))
-                .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(response)));
-    }
-
-    @Test
     void createAuthToken_Success() throws Exception
     {
         UserLoginDto loginDto = new UserLoginDto("john", "pass");

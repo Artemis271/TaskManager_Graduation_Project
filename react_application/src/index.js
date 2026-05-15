@@ -9,9 +9,11 @@ import {ThemeProvider} from "./hooks/useTheme";
 import {Toaster} from "react-hot-toast";
 import ErrorBoundary from "./components/error-boundary/ErrorBoundary";
 import {useAxiosErrorInterceptor} from "./hooks/useAxiosErrorInterceptor";
+import {useAuth} from "./hooks/auth";
 
 function AppRoot() {
-    useAxiosErrorInterceptor();
+    const { logout } = useAuth();
+    useAxiosErrorInterceptor(logout);
     return (
         <>
             <Toaster

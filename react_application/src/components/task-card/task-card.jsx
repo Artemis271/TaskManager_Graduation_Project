@@ -68,13 +68,13 @@ export default function TaskCard({task, avatars, onRefresh}) {
                     {({close}) => (
                         <TaskForm
                             style={{width: '100%'}}
+                            isEdit={true}
                             initTaskData={task}
                             avatars={avatars}
-                            onSubmit={async formData => {
+                            onSubmit={async data => {
                                 await axios.patch(
                                     `http://${backHost}:${backPort}/api/tasks/update/${task.id}`,
-                                    formData,
-                                    {headers: {'Content-Type': 'multipart/form-data'}}
+                                    data
                                 );
                                 close();
                                 onRefresh?.();

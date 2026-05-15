@@ -44,6 +44,15 @@ public class ProjectController
         );
     }
 
+    @GetMapping("/admin/all")
+    public ResponseEntity<List<ProjectDto>> getAllProjectsAdmin(
+            @RequestHeader("X-Roles") String roles)
+    {
+        if (!roles.contains("ROLE_ADMIN"))
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(projectService.getAllForAdmin(), HttpStatus.OK);
+    }
+
     @PostMapping("/createProject")
     public ResponseEntity<ProjectDto> createProject(
             @ModelAttribute ProjectInputDto newProject,

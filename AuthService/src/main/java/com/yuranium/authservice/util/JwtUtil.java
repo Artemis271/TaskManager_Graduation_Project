@@ -68,29 +68,29 @@ public class JwtUtil
                 .getPayload();
     }
 
+    public Long getUserId(String token)
+    {
+        return getAllClaims(token).get("id", Long.class);
+    }
+
     public AuthValidationResponse isValidToken(String authHeader)
     {
-        String token = null;
         if (authHeader == null || !authHeader.startsWith(BEARER_PREFIX))
-            return AuthValidationResponse.builder()
-                    .valid(false)
-                    .build();
+            return AuthValidationResponse.builder().valid(false).build();
+
+        String token = authHeader.substring(BEARER_PREFIX.length());
         try
         {
-            token = authHeader.substring(BEARER_PREFIX.length());
-            getUsername(token);
-            getRoles(token);
-
+            Claims claims = getAllClaims(token);
+            return AuthValidationResponse.builder()
+                    .valid(true)
+                    .userId(claims.get("id", Long.class))
+                    .username(claims.getSubject())
+                    .roles(claims.get("roles", List.class))
+                    .build();
         } catch (JwtException | IllegalArgumentException exc)
         {
-            return AuthValidationResponse.builder()
-                    .valid(false)
-                    .build();
+            return AuthValidationResponse.builder().valid(false).build();
         }
-        return AuthValidationResponse.builder()
-                .valid(true)
-                .username(getUsername(token))
-                .roles(getRoles(token))
-                .build();
     }
 }

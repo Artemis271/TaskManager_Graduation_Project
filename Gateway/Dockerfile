@@ -1,7 +1,8 @@
 FROM maven:latest AS builder
 WORKDIR /application
+ENV MAVEN_OPTS="-Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true -Dhttps.protocols=TLSv1.2,TLSv1.3 -Dmaven.wagon.http.retryHandler.count=5"
 COPY . .
-RUN --mount=type=cache,target=/root/.m2  mvn clean install -Dmaven.test.skip
+RUN for i in 1 2 3; do mvn clean install -Dmaven.test.skip=true -B && break || sleep 15; done
 
 FROM bellsoft/liberica-openjre-alpine:24.0.1 AS layers
 WORKDIR /application

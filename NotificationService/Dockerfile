@@ -1,5 +1,6 @@
 FROM maven:3.9.4-eclipse-temurin-17 AS builder
 WORKDIR /workspace
+ENV MAVEN_OPTS="-Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true"
 
 COPY Core/pom.xml Core/pom.xml
 COPY Core/src Core/src

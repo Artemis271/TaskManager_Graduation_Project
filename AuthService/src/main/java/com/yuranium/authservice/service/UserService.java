@@ -119,6 +119,14 @@ public class UserService implements UserDetailsService
         kafkaProducer.sendUpdateUserEvent(userEntity);
     }
 
+    @Transactional(readOnly = true)
+    public List<UserInfoDto> getAllUsers()
+    {
+        return userRepository.findAllByIsDeletedFalse().stream()
+                .map(userMapper::toInfoDto)
+                .toList();
+    }
+
     @Transactional
     public UserDto assignAdminRole(Long id)
     {

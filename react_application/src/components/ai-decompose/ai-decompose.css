@@ -85,17 +85,6 @@
     font-weight: 500;
 }
 
-.ai-decompose__badge--low {
-    background: #1e3a2a;
-    color: #6fcf97;
-}
-
-.ai-decompose__badge--intermediate {
-    background: #3a2e1a;
-    color: #f2c94c;
-}
-
-.ai-decompose__badge--high {
-    background: #3a1a1a;
-    color: #eb5757;
-}
+.ai-decompose__badge--low        { background: var(--badge-low-bg);  color: var(--badge-low-text); }
+.ai-decompose__badge--intermediate { background: var(--badge-mid-bg);  color: var(--badge-mid-text); }
+.ai-decompose__badge--high       { background: var(--badge-high-bg); color: var(--badge-high-text); }

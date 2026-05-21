@@ -8,21 +8,21 @@
 
 .ai-decompose__title {
     font-size: 1.1rem;
-    color: #e0e0e0;
+    color: var(--text);
     margin: 0;
 }
 
 .ai-decompose__hint {
-    color: #888;
+    color: var(--text-muted);
     font-size: 0.85rem;
     margin: 0;
 }
 
 .ai-decompose__input {
-    background: #1a1a1a;
-    border: 1px solid #2e2e2e;
+    background: var(--bg-input);
+    border: 1px solid var(--border);
     border-radius: 8px;
-    color: #e0e0e0;
+    color: var(--text);
     font-size: 0.9rem;
     padding: 10px 12px;
     resize: vertical;
@@ -32,7 +32,7 @@
 }
 
 .ai-decompose__input:focus {
-    border-color: #9cdbcb;
+    border-color: var(--accent);
 }
 
 .ai-decompose__results {
@@ -50,8 +50,8 @@
 }
 
 .ai-decompose__task-item {
-    background: #1a1a1a;
-    border: 1px solid #2e2e2e;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
     border-radius: 8px;
     padding: 12px 14px;
 }
@@ -66,13 +66,13 @@
 
 .ai-decompose__task-name {
     font-size: 0.9rem;
-    color: #e0e0e0;
+    color: var(--text);
     font-weight: 500;
 }
 
 .ai-decompose__task-desc {
     font-size: 0.82rem;
-    color: #888;
+    color: var(--text-muted);
     margin: 0;
     line-height: 1.4;
 }

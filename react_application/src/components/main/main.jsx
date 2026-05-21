@@ -52,14 +52,14 @@ export default function Main() {
                             dx="0"
                             dy="0"
                             stdDeviation="40"
-                            floodColor="#9cdbcb"/>
+                            floodColor="#818cf8"/>
                     </filter>
                 </defs>
                 <circle
                     cx="125"
                     cy="125"
                     r="60"
-                    fill="#9cdbcb"
+                    fill="#818cf8"
                     filter="url(#drop-shadow-1)"
                 />
             </svg>

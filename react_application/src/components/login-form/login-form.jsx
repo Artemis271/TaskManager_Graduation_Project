@@ -43,12 +43,12 @@ export default function LoginForm()
             <form onSubmit={handleSubmit} className="login-form">
                 <h2>Вход</h2>
                 <div className="form-group">
-                    <label htmlFor="username">Логин:</label>
+                    <label htmlFor="username">Email:</label>
                     <input
                         type="text"
                         id="username"
                         name="username"
-                        placeholder="Ваша почта"
+                        placeholder="Введите email"
                         value={formData.username}
                         onChange={handleChange}
                         required

@@ -30,13 +30,13 @@
 
 .admin-tab:hover {
     color: var(--text, #e0e0e0);
-    border-color: var(--accent, #9cdbcb);
+    border-color: var(--accent);
 }
 
 .admin-tab--active {
-    background: var(--accent, #9cdbcb);
-    border-color: var(--accent, #9cdbcb);
-    color: #111;
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
     font-weight: 600;
 }
 
@@ -90,9 +90,9 @@
 }
 
 .role-badge--user {
-    background: #9cdbcb33;
-    color: #9cdbcb;
-    border: 1px solid #9cdbcb55;
+    background: rgba(99,102,241,0.15);
+    color: var(--accent);
+    border: 1px solid rgba(99,102,241,0.3);
 }
 
 .role-badge--owner {

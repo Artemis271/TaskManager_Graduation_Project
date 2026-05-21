@@ -1,19 +1,19 @@
 :root[data-theme="light"] {
-    --bg:            #f0f2f5;
+    --bg:            #f8f9fc;
     --bg-elevated:   #ffffff;
     --bg-card:       #ffffff;
-    --bg-input:      #f8f9fa;
-    --border:        #e2e8f0;
-    --text:          #1a202c;
-    --text-muted:    #718096;
-    --accent:        #4b9b7e;
-    --accent-hover:  #3d8269;
-    --accent-light:  #e8f5f1;
+    --bg-input:      #f1f3f9;
+    --border:        #e5e7f2;
+    --text:          #1e1b4b;
+    --text-muted:    #6b7280;
+    --accent:        #6366f1;
+    --accent-hover:  #4f46e5;
+    --accent-light:  #eef2ff;
     --nav-bg:        #ffffff;
-    --sidebar-bg:    #ffffff;
-    --shadow-sm:     0 1px 3px rgba(0,0,0,0.08);
-    --shadow-md:     0 4px 12px rgba(0,0,0,0.12);
-    --shadow-hover:  0 8px 24px rgba(0,0,0,0.16);
+    --sidebar-bg:    #f8f9fc;
+    --shadow-sm:     0 1px 3px rgba(99,102,241,0.07);
+    --shadow-md:     0 4px 12px rgba(99,102,241,0.12);
+    --shadow-hover:  0 8px 24px rgba(99,102,241,0.18);
     --radius:        10px;
     --radius-sm:     6px;
     --radius-lg:     16px;
@@ -22,35 +22,35 @@
     --badge-mid-bg:   #fef9c3; --badge-mid-text:   #854d0e;
     --badge-high-bg:  #fee2e2; --badge-high-text:  #991b1b;
 
-    --col-plan-bg:      #f0f2f5;
-    --col-progress-bg:  #eff6ff;
+    --col-plan-bg:      #f8f9fc;
+    --col-progress-bg:  #eef2ff;
     --col-done-bg:      #f0fdf4;
     --col-cancel-bg:    #faf5ff;
     --col-expired-bg:   #fff1f2;
 
     --col-plan-accent:     #64748b;
-    --col-progress-accent: #3b82f6;
+    --col-progress-accent: #6366f1;
     --col-done-accent:     #22c55e;
     --col-cancel-accent:   #a855f7;
     --col-expired-accent:  #ef4444;
 }
 
 :root[data-theme="dark"] {
-    --bg:            #0f0f0f;
-    --bg-elevated:   #1a1a1a;
-    --bg-card:       #1e1e1e;
-    --bg-input:      #252525;
-    --border:        #2e2e2e;
-    --text:          #e2e8f0;
-    --text-muted:    #718096;
-    --accent:        #9cdbcb;
-    --accent-hover:  #7bc4b3;
-    --accent-light:  #1a2e2a;
-    --nav-bg:        #111111;
-    --sidebar-bg:    #141414;
-    --shadow-sm:     0 1px 3px rgba(0,0,0,0.4);
-    --shadow-md:     0 4px 12px rgba(0,0,0,0.5);
-    --shadow-hover:  0 8px 24px rgba(0,0,0,0.7);
+    --bg:            #0d0d1a;
+    --bg-elevated:   #14142a;
+    --bg-card:       #1a1a30;
+    --bg-input:      #20203c;
+    --border:        #2e2e54;
+    --text:          #e0e0f8;
+    --text-muted:    #8b8bb0;
+    --accent:        #818cf8;
+    --accent-hover:  #6366f1;
+    --accent-light:  #1e1b4b;
+    --nav-bg:        #0a0a16;
+    --sidebar-bg:    #111128;
+    --shadow-sm:     0 1px 3px rgba(0,0,0,0.5);
+    --shadow-md:     0 4px 12px rgba(0,0,0,0.6);
+    --shadow-hover:  0 8px 24px rgba(0,0,0,0.75);
     --radius:        10px;
     --radius-sm:     6px;
     --radius-lg:     16px;
@@ -59,14 +59,14 @@
     --badge-mid-bg:   #713f12; --badge-mid-text:   #fde047;
     --badge-high-bg:  #7f1d1d; --badge-high-text:  #fca5a5;
 
-    --col-plan-bg:      #1a1a1a;
-    --col-progress-bg:  #111b2e;
+    --col-plan-bg:      #14142a;
+    --col-progress-bg:  #1a1b3e;
     --col-done-bg:      #0f2318;
     --col-cancel-bg:    #1e1226;
-    --col-expired-bg:   #2a0f0f;
+    --col-expired-bg:   #2a0f12;
 
     --col-plan-accent:     #94a3b8;
-    --col-progress-accent: #60a5fa;
+    --col-progress-accent: #818cf8;
     --col-done-accent:     #4ade80;
     --col-cancel-accent:   #c084fc;
     --col-expired-accent:  #f87171;

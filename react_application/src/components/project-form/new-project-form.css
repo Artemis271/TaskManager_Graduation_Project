@@ -25,12 +25,12 @@ input[type=text], input[type=password], .new-project-textarea {
 
 input:focus, .new-project-textarea:focus {
     outline: none;
-    box-shadow: 0 0 0 1px #4b9b7e;
-    border-color: #4b9b7e;
+    box-shadow: 0 0 0 1px var(--accent);
+    border-color: var(--accent);
 }
 
 input[type=text]:hover, input[type=password]:hover, .new-project-textarea:hover {
-    border-color: #4b9b7e;
+    border-color: var(--accent);
 }
 
 .new-project-textarea {

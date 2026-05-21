@@ -140,14 +140,16 @@ public class TaskControllerTest
         UUID id = UUID.randomUUID();
         TaskDto dto = new TaskDto(id, "Name", "Desc", TaskImportance.HIGH,
                 TaskStatus.IN_PROGRESS, LocalDate.now(), LocalDate.now(), false, List.of());
-        given(taskService.getTask(id)).willReturn(dto);
+        Long userId = 1L;
+        given(taskService.getTask(id, userId)).willReturn(dto);
 
-        mockMvc.perform(get("/tasks/" + id))
+        mockMvc.perform(get("/tasks/" + id)
+                        .header("X-User-Id", userId))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(dto)));
     }
 
-    @Test
+     @Test
     void createTask() throws Exception {
         UUID pid = UUID.randomUUID();
         MockMultipartFile file = new MockMultipartFile("images", "img.png",

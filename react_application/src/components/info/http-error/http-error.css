@@ -1,14 +1,8 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f8f9fa;
-}
-
 .http-error-container {
     display: flex;
     justify-content: center;
     align-items: center;
+    min-height: calc(100vh - 56px);
 }
 
 .error-container {
@@ -17,11 +11,12 @@ body {
 
 .error-code {
     font-size: 100px;
-    color: #dc3545;
+    color: var(--col-expired-accent);
     margin-bottom: 20px;
+    font-weight: 800;
 }
 
 .error-message {
     font-size: 24px;
-    color: #dc3545;
+    color: var(--text-muted);
 }

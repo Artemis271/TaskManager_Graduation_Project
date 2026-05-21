@@ -1,26 +1,29 @@
 .project-form-main {
     display: flex;
     justify-content: center;
+    padding: 24px;
 }
 
 h3 {
     text-align: center;
+    color: var(--text);
 }
 
-form {
+.project-form-main form {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background-color: #ececec;
-    width: 30%;
-    border-radius: 10px;
-    box-shadow: 4px 4px 8px 0 rgba(34, 60, 80, 0.2);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    width: 400px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: 24px;
 }
 
 input[type=text], input[type=password], .new-project-textarea {
-    border-radius: 10px;
-    transition: border-top-color 0.5s ease, border-bottom-color 0.5s ease,
-    border-left-color 0.5s ease, border-right-color 0.5s ease;
+    border-radius: var(--radius-sm);
+    transition: border-color 0.2s;
 }
 
 input:focus, .new-project-textarea:focus {
@@ -35,19 +38,19 @@ input[type=text]:hover, input[type=password]:hover, .new-project-textarea:hover 
 
 .new-project-textarea {
     resize: none;
-    font-size: 1.2em;
-    padding: 1%;
+    font-size: 1rem;
+    padding: 8px 10px;
     margin: 0;
+    background: var(--bg-input);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: inherit;
 }
 
 .input-wrap > input {
     padding: 2%;
     font-size: .9em;
-}
-
-label {
-     display: block;
-     padding: 1em 0;
 }
 
 .input-wrap {

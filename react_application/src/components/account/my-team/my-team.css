@@ -1,49 +1,58 @@
 .my-team-container {
-    margin: 0 30%;
-    padding: 1rem;
-    border-radius: 1rem;
-    background-color: #ececec;
-    box-shadow: 0 7px 45px 25px rgba(133, 133, 133, 0.25);
+    margin: 0 auto;
+    max-width: 600px;
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-md);
 }
 
 .my-team-header {
-    color: #666;;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0 0 12px;
 }
 
 .current-member {
     display: flex;
-    justify-content: start;
     align-items: center;
-    border-radius: 1rem;
-    margin-bottom: .5rem;
-    background-color: #e5e5e5;
-    transition: box-shadow .5s ease;
+    border-radius: var(--radius);
+    margin-bottom: 8px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    transition: box-shadow 0.2s, border-color 0.2s;
+    cursor: pointer;
 }
 
 .current-member:hover {
-    box-shadow: 0 0 0 3px rgba(133, 133, 133, 0.25);
+    box-shadow: var(--shadow-sm);
+    border-color: var(--accent);
 }
 
- .current-member span {
-     font-size: x-large;
-     color: #80d0b2;
-     font-weight: bolder;
-     margin-left: 2rem;
- }
+.current-member span {
+    font-size: 1.1rem;
+    color: var(--accent);
+    font-weight: 600;
+    margin-left: 1rem;
+}
 
 .member-avatar {
-    width: 90px;
-    height: 90px;
+    width: 56px;
+    height: 56px;
     border-radius: 50%;
     cursor: pointer;
     object-fit: cover;
     object-position: center;
     image-rendering: auto;
-    padding: 10px;
+    padding: 8px;
 }
 
 .member-username {
-    font-weight: bold;
-    font-size: x-large;
-    color: #5c799d;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text);
 }

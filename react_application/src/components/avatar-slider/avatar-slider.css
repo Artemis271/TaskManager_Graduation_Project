@@ -10,7 +10,7 @@
     border: none;
     font-size: 1.5rem;
     cursor: pointer;
-    color: #333;
+    color: var(--text);
     padding: 0;
 }
 

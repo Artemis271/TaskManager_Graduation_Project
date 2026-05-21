@@ -17,16 +17,16 @@
 }
 
 .form-error {
-    color: red;
+    color: #ef4444;
 }
 
 .register-container a {
     text-decoration: none;
-    transition: color 0.5s ease;
+    transition: color 0.2s ease;
 }
 
 .register-container a:hover {
-    color: #80d0b2;
+    color: var(--accent-hover);
 }
 
 .password-inputs {
@@ -54,7 +54,7 @@
 }
 
 .field-error {
-    color: red;
+    color: #ef4444;
 }
 
 .password-inner-wrapper {
@@ -78,9 +78,14 @@
     display: flex;
     line-height: 1;
     cursor: pointer;
-    color: rgba(0, 0, 0, 0.6);
+    color: var(--text-muted);
     font-size: 1.2rem;
     top: 50%;
     right: 1rem;
     transform: translateY(-50%);
+    transition: color 0.2s;
+}
+
+.registration-password-toggle-icon:hover {
+    color: var(--accent);
 }

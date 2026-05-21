@@ -7,30 +7,33 @@
 .admin-panel__title {
     margin-bottom: 1.5rem;
     font-size: 1.6rem;
+    color: var(--text);
 }
 
 .admin-panel__tabs {
     display: flex;
     gap: 0.5rem;
     margin-bottom: 1.5rem;
-    border-bottom: 1px solid var(--border-color, #2e2e2e);
+    border-bottom: 1px solid var(--border);
     padding-bottom: 0.5rem;
 }
 
 .admin-tab {
     background: none;
-    border: 1px solid var(--border-color, #2e2e2e);
-    border-radius: var(--radius, 6px);
-    color: var(--text-muted, #999);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
     cursor: pointer;
     font-size: 0.9rem;
     padding: 0.4rem 1rem;
     transition: all 0.2s;
+    font-family: inherit;
 }
 
 .admin-tab:hover {
-    color: var(--text, #e0e0e0);
+    color: var(--text);
     border-color: var(--accent);
+    background: var(--accent-light);
 }
 
 .admin-tab--active {
@@ -48,23 +51,25 @@
 
 .admin-table th,
 .admin-table td {
-    border: 1px solid var(--border-color, #2e2e2e);
+    border: 1px solid var(--border);
     padding: 0.6rem 0.8rem;
     text-align: left;
     vertical-align: middle;
+    color: var(--text);
 }
 
 .admin-table th {
-    background: var(--surface, #1e1e1e);
+    background: var(--bg-input);
     font-weight: 600;
-    color: var(--text-muted, #999);
+    color: var(--text-muted);
     font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
 
 .admin-table tr:hover td {
-    background: var(--surface, #1e1e1e);
+    background: var(--accent-light);
+    color: var(--text);
 }
 
 .admin-table__actions {
@@ -84,19 +89,19 @@
 }
 
 .role-badge--admin {
-    background: #e05a5a33;
+    background: rgba(224, 90, 90, 0.15);
     color: #e05a5a;
-    border: 1px solid #e05a5a55;
+    border: 1px solid rgba(224, 90, 90, 0.35);
 }
 
 .role-badge--user {
-    background: rgba(99,102,241,0.15);
+    background: var(--accent-light);
     color: var(--accent);
-    border: 1px solid rgba(99,102,241,0.3);
+    border: 1px solid var(--border);
 }
 
 .role-badge--owner {
-    background: #f0a50033;
+    background: rgba(240, 165, 0, 0.12);
     color: #f0a500;
-    border: 1px solid #f0a50055;
+    border: 1px solid rgba(240, 165, 0, 0.35);
 }

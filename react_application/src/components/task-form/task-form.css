@@ -9,14 +9,15 @@
     width: 100%;
     text-align: center;
     justify-content: center;
-    background-color: #ececec;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
     padding: 0 2% 2% 2%;
-    border-radius: 10px;
-    box-shadow: 4px 4px 8px 0 rgba(34, 60, 80, 0.2);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    color: var(--text);
 }
 
-.taskDescriptionLabel
-{
+.taskDescriptionLabel {
     display: block;
 }
 
@@ -30,25 +31,23 @@
     width: 96%;
 }
 
-button {
-    padding: 1em;
-    cursor: pointer;
-}
-
 label {
     font-size: large;
     padding: 0 0 .3em 0;
+    color: var(--text);
 }
 
 .fileFormat {
-    color: firebrick
+    color: var(--col-expired-accent);
 }
 
 fieldset {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    border-radius: 10px;
+    border-radius: var(--radius);
+    border-color: var(--border);
+    color: var(--text);
 }
 
 fieldset label {

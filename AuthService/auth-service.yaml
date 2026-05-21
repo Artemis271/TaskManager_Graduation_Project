@@ -1,4 +1,4 @@
-openapi: 3.0.3
+﻿openapi: 3.0.3
 info:
   title: Auth service в Task-Manager
   description: Описание эндпоинтов для сервиса аутентификации в Task Manager
@@ -309,7 +309,7 @@ components:
           example: 1
         username:
           type: string
-          example: 'Yuranium'
+          example: 'artemis'
         email:
           type: string
           example: example@example.com
@@ -329,7 +329,7 @@ components:
       properties:
         username:
           type: string
-          example: 'Yuranium'
+          example: 'artemis'
         name:
           type: string
           example: Юрий
@@ -402,7 +402,7 @@ components:
           example: 1
         username:
           type: string
-          example: 'Yuranium'
+          example: 'artemis'
         name:
           type: string
           example: Юрий
@@ -436,7 +436,7 @@ components:
       properties:
         username:
           type: string
-          example: 'Yuranium'
+          example: 'artemis'
         name:
           type: string
           example: Юрий

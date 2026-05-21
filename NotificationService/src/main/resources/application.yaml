@@ -1,4 +1,4 @@
-server:
+﻿server:
   port: ${NOTIFICATION_PORT:8086}
 
 websocket:
@@ -41,5 +41,5 @@ spring:
       bootstrap-servers: ${BOOTSTRAP_HOST_1:localhost}:${BOOTSTRAP_PORT_1:9092},${BOOTSTRAP_HOST_2:localhost}:${BOOTSTRAP_PORT_2:9094}
       isolation-level: READ_COMMITTED
       properties:
-        spring.json.trusted.packages: com.yuranium.core.events
+        spring.json.trusted.packages: com.artemis.core.events
         spring.json.use.type.headers: true

@@ -19,7 +19,8 @@ export function useAxiosErrorInterceptor(logout) {
             response => response,
             error => {
                 const status = error?.response?.status;
-                if (status === 401) {
+                const url = error?.config?.url || '';
+                if (status === 401 && !url.includes('/api/auth/login')) {
                     toast.error('Сессия истекла — войдите снова');
                     logout?.();
                     return Promise.reject(error);

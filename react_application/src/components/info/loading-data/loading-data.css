@@ -2,28 +2,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    min-height: 200px;
 }
 
 .loading-main h2 {
-    color: #727272;
-}
-
-@-webkit-keyframes honeycomb {
-    0%,
-    20%,
-    80%,
-    100% {
-        opacity: 0;
-        -webkit-transform: scale(0);
-        transform: scale(0);
-    }
-
-    30%,
-    70% {
-        opacity: 1;
-        -webkit-transform: scale(1);
-        transform: scale(1);
-    }
+    color: var(--text-muted);
 }
 
 @keyframes honeycomb {
@@ -32,14 +15,12 @@
     80%,
     100% {
         opacity: 0;
-        -webkit-transform: scale(0);
         transform: scale(0);
     }
 
     30%,
     70% {
         opacity: 1;
-        -webkit-transform: scale(1);
         transform: scale(1);
     }
 }
@@ -53,9 +34,8 @@
 }
 
 .honeycomb div {
-    -webkit-animation: honeycomb 2.1s infinite backwards;
     animation: honeycomb 2.1s infinite backwards;
-    background: #80d0b2;
+    background: var(--accent);
     height: 12px;
     margin-top: 6px;
     position: absolute;
@@ -73,59 +53,18 @@
 
 .honeycomb div:after {
     top: -6px;
-    border-bottom: 6px solid #80d0b2;
+    border-bottom: 6px solid var(--accent);
 }
 
 .honeycomb div:before {
     bottom: -6px;
-    border-top: 6px solid #80d0b2;
+    border-top: 6px solid var(--accent);
 }
 
-.honeycomb div:nth-child(1) {
-    -webkit-animation-delay: 0s;
-    animation-delay: 0s;
-    left: -28px;
-    top: 0;
-}
-
-.honeycomb div:nth-child(2) {
-    -webkit-animation-delay: 0.1s;
-    animation-delay: 0.1s;
-    left: -14px;
-    top: 22px;
-}
-
-.honeycomb div:nth-child(3) {
-    -webkit-animation-delay: 0.2s;
-    animation-delay: 0.2s;
-    left: 14px;
-    top: 22px;
-}
-
-.honeycomb div:nth-child(4) {
-    -webkit-animation-delay: 0.3s;
-    animation-delay: 0.3s;
-    left: 28px;
-    top: 0;
-}
-
-.honeycomb div:nth-child(5) {
-    -webkit-animation-delay: 0.4s;
-    animation-delay: 0.4s;
-    left: 14px;
-    top: -22px;
-}
-
-.honeycomb div:nth-child(6) {
-    -webkit-animation-delay: 0.5s;
-    animation-delay: 0.5s;
-    left: -14px;
-    top: -22px;
-}
-
-.honeycomb div:nth-child(7) {
-    -webkit-animation-delay: 0.6s;
-    animation-delay: 0.6s;
-    left: 0;
-    top: 0;
-}
+.honeycomb div:nth-child(1) { animation-delay: 0s;   left: -28px; top: 0; }
+.honeycomb div:nth-child(2) { animation-delay: 0.1s; left: -14px; top: 22px; }
+.honeycomb div:nth-child(3) { animation-delay: 0.2s; left:  14px; top: 22px; }
+.honeycomb div:nth-child(4) { animation-delay: 0.3s; left:  28px; top: 0; }
+.honeycomb div:nth-child(5) { animation-delay: 0.4s; left:  14px; top: -22px; }
+.honeycomb div:nth-child(6) { animation-delay: 0.5s; left: -14px; top: -22px; }
+.honeycomb div:nth-child(7) { animation-delay: 0.6s; left:   0px; top: 0; }

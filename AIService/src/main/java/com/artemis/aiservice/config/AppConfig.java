@@ -1,4 +1,4 @@
-﻿package com.artemis.aiservice.config;
+package com.artemis.aiservice.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-﻿package com.artemis.authservice.config;
+package com.artemis.authservice.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

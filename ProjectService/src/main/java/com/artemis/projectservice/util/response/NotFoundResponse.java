@@ -1,4 +1,4 @@
-﻿package com.artemis.projectservice.util.response;
+package com.artemis.projectservice.util.response;
 
 import org.springframework.http.HttpStatus;
 

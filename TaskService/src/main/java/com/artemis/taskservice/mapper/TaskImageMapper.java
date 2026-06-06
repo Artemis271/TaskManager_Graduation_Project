@@ -1,4 +1,4 @@
-﻿package com.artemis.taskservice.mapper;
+package com.artemis.taskservice.mapper;
 
 import com.artemis.taskservice.dto.TaskImageDto;
 import com.artemis.taskservice.dto.TaskImageInputDto;

@@ -4,26 +4,44 @@
     overflow: hidden;
 }
 
-/* Sidebar */
+/* ── Sidebar ────────────────────────────────────────── */
 .project-sidebar {
     width: 220px;
     flex-shrink: 0;
-    background-color: var(--sidebar-bg);
+    background: var(--sidebar-bg);
     border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
-    padding: 16px;
-    gap: 12px;
+    padding: 14px 12px;
+    gap: 10px;
     overflow-y: auto;
 }
 
-.project-sidebar h3 {
-    font-size: 0.8rem;
+.sidebar-back {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--accent);
+    background: var(--accent-light);
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 7px 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+    width: 100%;
+    text-align: left;
+}
+.sidebar-back:hover { background: rgba(124, 58, 237, 0.15); }
+
+.sidebar-label {
+    font-size: 0.72rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.06em;
     color: var(--text-muted);
-    margin: 0;
+    margin: 4px 0 0;
 }
 
 .project-sidebar ul {
@@ -39,21 +57,22 @@
     border-radius: var(--radius-sm);
     transition: background-color 0.2s;
 }
-
-.project-sidebar ul li:hover {
-    background-color: var(--accent-light);
-}
+.project-sidebar ul li:hover { background: var(--accent-light); }
 
 .project-sidebar ul a {
     display: block;
     padding: 7px 10px;
     text-decoration: none;
     color: var(--text);
-    font-size: 0.875rem;
+    font-size: 0.85rem;
     border-radius: var(--radius-sm);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
+.project-sidebar ul a:hover { color: var(--accent); }
 
-/* Main area */
+/* ── Main ───────────────────────────────────────────── */
 .project-main {
     flex: 1;
     display: flex;
@@ -61,34 +80,163 @@
     overflow: hidden;
 }
 
-/* Toolbar */
-.task-toolbar {
+/* ── Project header ─────────────────────────────────── */
+.project-header {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 12px 20px;
-    background-color: var(--bg-elevated);
+    gap: 1rem;
+    padding: 14px 20px;
+    background: var(--bg-elevated);
     border-bottom: 1px solid var(--border);
-    flex-wrap: wrap;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
 }
 
-.task-toolbar .button {
-    margin: 0;
-    padding: 6px 10px;
+.project-header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #7c3aed, #a78bfa, #7c3aed);
+}
+
+.project-header__cover {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius);
+    object-fit: cover;
+    flex-shrink: 0;
+    border: 2px solid var(--border);
+}
+
+.project-header__info {
+    flex: 1;
+    min-width: 0;
+}
+
+.project-header__name {
     font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0 0 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.project-header__desc {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.project-header__stats {
+    display: flex;
+    gap: 1.2rem;
+    flex-shrink: 0;
+}
+
+.project-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+}
+
+.project-stat__value {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--accent);
     line-height: 1;
 }
 
+.project-stat__label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+/* ── Toolbar ────────────────────────────────────────── */
+.task-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: var(--bg-elevated);
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+    flex-shrink: 0;
+}
+
+.toolbar-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg-input);
+    color: var(--text);
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    line-height: 1;
+}
+.toolbar-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-light);
+}
+.toolbar-btn--primary {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+}
+.toolbar-btn--primary:hover {
+    background: #6d28d9;
+    color: #fff;
+    border-color: #6d28d9;
+}
+
+.toolbar-divider {
+    width: 1px;
+    height: 24px;
+    background: var(--border);
+    margin: 0 4px;
+}
+
+.toolbar-filter {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.toolbar-filter label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.toolbar-filter select,
 .task-toolbar select {
-    padding: 6px 10px;
-    font-size: 0.875rem;
-    background-color: var(--bg-input);
+    padding: 5px 10px;
+    font-size: 0.82rem;
+    background: var(--bg-input);
     color: var(--text);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     cursor: pointer;
+    transition: border-color 0.2s;
 }
-
+.toolbar-filter select:focus,
 .task-toolbar select:focus {
     border-color: var(--accent);
     outline: none;
@@ -98,8 +246,9 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 0.875rem;
+    font-size: 0.82rem;
     color: var(--text-muted);
+    margin-left: auto;
 }
 
 .toggle-checkbox {
@@ -113,33 +262,25 @@
     position: relative;
     width: 36px;
     height: 20px;
-    background-color: var(--border);
+    background: var(--border);
     border-radius: 99px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background 0.3s;
 }
-
-.toggle-checkbox:checked + .toggle-container {
-    background-color: var(--accent);
-}
+.toggle-checkbox:checked + .toggle-container { background: var(--accent); }
 
 .toggle-button {
     position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 16px;
-    height: 16px;
+    top: 2px; left: 2px;
+    width: 16px; height: 16px;
     background: #fff;
     border-radius: 50%;
     transition: left 0.3s;
     box-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
+.toggle-checkbox:checked + .toggle-container .toggle-button { left: 18px; }
 
-.toggle-checkbox:checked + .toggle-container .toggle-button {
-    left: 18px;
-}
-
-/* Kanban board */
+/* ── Kanban ──────────────────────────────────────────── */
 .kanban-board {
     flex: 1;
     display: flex;
@@ -168,7 +309,7 @@
 }
 
 .kanban-column__title {
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -176,10 +317,10 @@
 
 .kanban-column__count {
     font-size: 0.75rem;
-    font-weight: 600;
-    padding: 2px 7px;
+    font-weight: 700;
+    padding: 2px 8px;
     border-radius: 99px;
-    background: rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.2);
 }
 
 .kanban-column__cards {
@@ -191,38 +332,43 @@
     flex: 1;
 }
 
-/* Column color themes */
+/* Column colour themes */
 .kanban-column--planing .kanban-column__header {
     background: var(--col-plan-bg);
     border-color: var(--col-plan-accent);
 }
 .kanban-column--planing .kanban-column__title { color: var(--col-plan-accent); }
+.kanban-column--planing .kanban-column__count { background: var(--col-plan-accent); color: #fff; }
 
 .kanban-column--in_progress .kanban-column__header {
     background: var(--col-progress-bg);
     border-color: var(--col-progress-accent);
 }
 .kanban-column--in_progress .kanban-column__title { color: var(--col-progress-accent); }
+.kanban-column--in_progress .kanban-column__count { background: var(--col-progress-accent); color: #fff; }
 
 .kanban-column--completed .kanban-column__header {
     background: var(--col-done-bg);
     border-color: var(--col-done-accent);
 }
 .kanban-column--completed .kanban-column__title { color: var(--col-done-accent); }
+.kanban-column--completed .kanban-column__count { background: var(--col-done-accent); color: #fff; }
 
 .kanban-column--canceled .kanban-column__header {
     background: var(--col-cancel-bg);
     border-color: var(--col-cancel-accent);
 }
 .kanban-column--canceled .kanban-column__title { color: var(--col-cancel-accent); }
+.kanban-column--canceled .kanban-column__count { background: var(--col-cancel-accent); color: #fff; }
 
 .kanban-column--expired .kanban-column__header {
     background: var(--col-expired-bg);
     border-color: var(--col-expired-accent);
 }
 .kanban-column--expired .kanban-column__title { color: var(--col-expired-accent); }
+.kanban-column--expired .kanban-column__count { background: var(--col-expired-accent); color: #fff; }
 
-/* Empty project */
+/* ── Empty state ────────────────────────────────────── */
 .project-empty {
     display: flex;
     align-items: center;
@@ -233,17 +379,22 @@
     color: var(--text-muted);
 }
 
-/* Autosuggest */
+/* ── Autosuggest ────────────────────────────────────── */
 .react-autosuggest__container { position: relative; }
 
 .react-autosuggest__input {
     padding: 6px 10px;
-    font-size: 0.875rem;
+    font-size: 0.82rem;
     border-radius: var(--radius-sm);
     border: 1px solid var(--border);
     background: var(--bg-input);
     color: var(--text);
-    width: 180px;
+    width: 100%;
+    box-sizing: border-box;
+}
+.react-autosuggest__input:focus {
+    outline: none;
+    border-color: var(--accent);
 }
 
 .react-autosuggest__suggestions-list {
@@ -265,14 +416,13 @@
 .react-autosuggest__suggestion {
     padding: 7px 10px;
     border-radius: var(--radius-sm);
-    font-size: 0.875rem;
+    font-size: 0.82rem;
     color: var(--text);
     cursor: pointer;
     transition: background-color 0.15s;
 }
-
 .react-autosuggest__suggestion:hover,
 .react-autosuggest__suggestion--highlighted {
-    background-color: var(--accent-light);
+    background: var(--accent-light);
     color: var(--accent);
 }

@@ -1,4 +1,4 @@
-﻿package com.artemis.authservice.service;
+package com.artemis.authservice.service;
 
 import com.artemis.authservice.enums.RoleType;
 import com.artemis.authservice.mapper.UserMapper;

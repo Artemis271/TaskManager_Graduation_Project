@@ -1,4 +1,4 @@
-﻿package com.artemis.authservice.controller;
+package com.artemis.authservice.controller;
 
 import com.artemis.authservice.models.dto.*;
 

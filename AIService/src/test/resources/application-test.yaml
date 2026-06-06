@@ -1,0 +1,4 @@
+groq:
+  api-key: test-api-key-for-integration-tests
+  url: http://localhost/fake-groq-endpoint
+  model: test-model

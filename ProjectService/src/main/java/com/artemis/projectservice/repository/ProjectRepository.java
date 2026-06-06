@@ -1,4 +1,4 @@
-﻿package com.artemis.projectservice.repository;
+package com.artemis.projectservice.repository;
 
 import com.artemis.projectservice.entity.ProjectEntity;
 import org.springframework.data.domain.Page;

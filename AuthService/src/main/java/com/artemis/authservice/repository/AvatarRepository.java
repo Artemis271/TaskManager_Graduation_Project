@@ -1,4 +1,4 @@
-﻿package com.artemis.authservice.repository;
+package com.artemis.authservice.repository;
 
 import com.artemis.authservice.models.entity.AvatarEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

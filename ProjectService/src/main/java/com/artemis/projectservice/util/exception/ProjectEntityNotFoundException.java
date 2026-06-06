@@ -1,4 +1,4 @@
-﻿package com.artemis.projectservice.util.exception;
+package com.artemis.projectservice.util.exception;
 
 import lombok.experimental.StandardException;
 

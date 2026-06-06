@@ -48,13 +48,12 @@ export default function Infograf()
             setProjects(projectResponse.data);
             setTasks(taskResponse.data);
             setStatuses(statusResponse.data);
-            setImportance(importanceResponse.data)
+            setImportance(importanceResponse.data);
         } catch (err) {
             if (axios.isAxiosError(err))
                 navigate('/500')
             else navigate('/404');
-        }
-        finally {
+        } finally {
             setLoading(false);
         }
     };
@@ -68,63 +67,96 @@ export default function Infograf()
 
     if (loading) return <LoadingData />;
 
+    const completedTasks = tasks.filter(t => t.taskStatus === 'COMPLETED').length;
+    const inProgressTasks = tasks.filter(t => t.taskStatus === 'IN_PROGRESS').length;
+    const highPriorityTasks = tasks.filter(t => t.taskImportance === 'HIGH').length;
+
     const pieData = projects.map(project =>
         tasks.filter(task => task.projectId === project.id).length);
-
     const pieLabels = projects.map(project => project.name);
 
     const barStatusData = statuses.map(status =>
         tasks.filter(task => task.taskStatus === status).length);
 
-    const barImportanceData = importance.map(importance =>
-        tasks.filter(task => task.taskImportance === importance).length);
+    const barImportanceData = importance.map(imp =>
+        tasks.filter(task => task.taskImportance === imp).length);
 
     const sortedDates = tasks
         .map(task => task.dateAdded)
         .sort((a, b) => new Date(a) - new Date(b));
-    const dates = {}
-    sortedDates.forEach(date => dates[date] = 0)
-
-    sortedDates.forEach(date => dates[date] = (dates[date] || 0) + 1);
-
+    const dates = {};
+    sortedDates.forEach(date => {
+        const day = date.split('T')[0];
+        dates[day] = (dates[day] || 0) + 1;
+    });
 
     return (
         <div className="infograf-main">
             <Background/>
+
+            <div className="infograf-header">
+                <h1>Аналитика задач</h1>
+                <p>Статистика по проектам и задачам вашего рабочего пространства</p>
+            </div>
+
+            <div className="stats-row">
+                <div className="stat-card">
+                    <div className="stat-value">{projects.length}</div>
+                    <div className="stat-label">Проектов</div>
+                </div>
+                <div className="stat-card">
+                    <div className="stat-value">{tasks.length}</div>
+                    <div className="stat-label">Задач всего</div>
+                </div>
+                <div className="stat-card">
+                    <div className="stat-value">{completedTasks}</div>
+                    <div className="stat-label">Завершено</div>
+                </div>
+                <div className="stat-card">
+                    <div className="stat-value">{inProgressTasks}</div>
+                    <div className="stat-label">В процессе</div>
+                </div>
+                <div className="stat-card">
+                    <div className="stat-value">{highPriorityTasks}</div>
+                    <div className="stat-label">Высокий приоритет</div>
+                </div>
+            </div>
+
             <div className="charts">
                 <div className="chart pie">
-                    <PieChart label="Количество задач в проекте"
+                    <p className="chart-title">Задачи по проектам</p>
+                    <PieChart label="Количество задач"
                               data={pieData}
                               labels={pieLabels}/>
                     <p className="chart-description">
-                        Инфографика отображения задач в каждом проекте
+                        Распределение задач между проектами
                     </p>
                 </div>
                 <div className="chart bar">
-                    <BarChart label="Количество задач"
+                    <p className="chart-title">Статусы выполнения</p>
+                    <BarChart label="Задачи"
                               data={barStatusData}
-                              labels={statuses}
-                    />
+                              labels={statuses}/>
                     <p className="chart-description">
-                        Инфографика отображения задач с конкретным статусом выполнения
+                        Количество задач в каждом статусе
                     </p>
                 </div>
                 <div className="chart bar importance">
-                    <BarChart label="Количество задач"
+                    <p className="chart-title">Уровни важности</p>
+                    <BarChart label="Задачи"
                               data={barImportanceData}
-                              labels={importance}
-                    />
+                              labels={importance}/>
                     <p className="chart-description">
-                        Инфографика отображения задач с конкретной важностью
+                        Распределение задач по уровню важности
                     </p>
                 </div>
                 <div className="chart line">
-                    <LineChart label="Количество созданных задач"
-                              data={Object.values(dates)}
-                              labels={Object.keys(dates).map(date => date.split('T')[0])}
-                    />
+                    <p className="chart-title">Динамика создания задач</p>
+                    <LineChart label="Создано задач"
+                               data={Object.values(dates)}
+                               labels={Object.keys(dates)}/>
                     <p className="chart-description">
-                        Инфографика отображения даты создания задач
+                        Количество задач, созданных по датам
                     </p>
                 </div>
             </div>

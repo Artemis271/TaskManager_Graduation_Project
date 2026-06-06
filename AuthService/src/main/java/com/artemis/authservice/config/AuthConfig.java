@@ -1,4 +1,4 @@
-﻿package com.artemis.authservice.config;
+package com.artemis.authservice.config;
 
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;

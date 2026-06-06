@@ -68,26 +68,25 @@ export default function SearchUser({onAddUser}) {
     };
 
     return (
-        <div className="search-box"
-             ref={containerRef}
-             onMouseEnter={() => setIsSuggestionsVisible(suggestedData.length > 0)}
-             onMouseLeave={() => setIsSuggestionsVisible(false)}>
-            <div className="icon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22">
-                    <path fill="currentColor"
-                          d="M18.9,16.776A10.539,10.539,0,1,0,16.776,18.9l5.1,5.1L24,21.88ZM10.5,18A7.5,7.5,0,1,1,18,10.5,7.507,7.507,0,0,1,10.5,18Z"/>
-                </svg>
+        <div className="search-user-wrapper" ref={containerRef}>
+            <div className="search-box">
+                <div className="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22">
+                        <path fill="currentColor"
+                              d="M18.9,16.776A10.539,10.539,0,1,0,16.776,18.9l5.1,5.1L24,21.88ZM10.5,18A7.5,7.5,0,1,1,18,10.5,7.507,7.507,0,0,1,10.5,18Z"/>
+                    </svg>
+                </div>
+                <input
+                    type="text"
+                    id="add-user-to-chat"
+                    name="add-user-to-chat"
+                    placeholder="Юзернейм"
+                    onChange={handleChange}
+                    onFocus={handleInputFocus}
+                    value={inputUsername}
+                    autoComplete="off"
+                />
             </div>
-            <input
-                type="text"
-                id="add-user-to-chat"
-                name="add-user-to-chat"
-                placeholder="Юзернейм"
-                onChange={handleChange}
-                onFocus={handleInputFocus}
-                value={inputUsername}
-                autoComplete="off"
-            />
             {isSuggestionsVisible && (
                 <div className="suggested-options">
                     {suggestedData.map(user => (
@@ -101,7 +100,7 @@ export default function SearchUser({onAddUser}) {
                             }}>
                             <img
                                 className="suggested-user-avatar"
-                                src={`data:image/jpeg;base64,${user.binaryData}`}
+                                src={user.binaryData ? `data:image/jpeg;base64,${user.binaryData}` : '/default-avatar.png'}
                                 alt="user-avatar"
                                 title="Профиль пользователя"
                             />

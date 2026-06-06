@@ -1,4 +1,4 @@
-﻿package com.artemis.authservice.util.response;
+package com.artemis.authservice.util.response;
 
 import org.springframework.http.HttpStatus;
 

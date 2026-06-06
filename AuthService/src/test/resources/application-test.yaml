@@ -1,0 +1,50 @@
+jwt:
+  secret: testSecretKeyForIntegrationTestingPurposesHmacSha256Algorithm1234
+  lifetime: 7d
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    defer-datasource-initialization: true
+  flyway:
+    enabled: false
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: fake-github-client-id
+            client-secret: fake-github-client-secret
+            redirect-uri: http://localhost/login/oauth2/code/github
+            scope:
+              - read:user
+              - user:email
+          google:
+            client-id: fake-google-client-id
+            client-secret: fake-google-client-secret
+            redirect-uri: http://localhost/login/oauth2/code/google
+          yandex:
+            client-id: fake-yandex-client-id
+            client-secret: fake-yandex-client-secret
+            client-authentication-method: client_secret_post
+            authorization-grant-type: authorization_code
+            redirect-uri: http://localhost/login/oauth2/code/yandex
+            scope:
+              - login:email
+              - login:info
+        provider:
+          yandex:
+            authorization-uri: https://oauth.yandex.ru/authorize
+            token-uri: https://oauth.yandex.ru/token
+            user-info-uri: https://login.yandex.ru/info
+            user-name-attribute: id

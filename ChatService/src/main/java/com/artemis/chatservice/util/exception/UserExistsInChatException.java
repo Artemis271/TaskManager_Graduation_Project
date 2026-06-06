@@ -1,4 +1,4 @@
-﻿package com.artemis.chatservice.util.exception;
+package com.artemis.chatservice.util.exception;
 
 import lombok.experimental.StandardException;
 

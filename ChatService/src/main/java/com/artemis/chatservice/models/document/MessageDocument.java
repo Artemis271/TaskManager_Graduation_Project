@@ -1,4 +1,4 @@
-﻿package com.artemis.chatservice.models.document;
+package com.artemis.chatservice.models.document;
 
 import com.artemis.chatservice.enums.MessageType;
 import com.artemis.chatservice.models.dto.ResponseMessage;

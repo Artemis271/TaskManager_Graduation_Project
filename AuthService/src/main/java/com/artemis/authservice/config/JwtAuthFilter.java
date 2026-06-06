@@ -1,4 +1,4 @@
-﻿package com.artemis.authservice.config;
+package com.artemis.authservice.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.artemis.authservice.util.JwtUtil;

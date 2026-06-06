@@ -1,4 +1,4 @@
-﻿package com.artemis.taskservice.enums;
+package com.artemis.taskservice.enums;
 
 public enum TaskStatus
 {

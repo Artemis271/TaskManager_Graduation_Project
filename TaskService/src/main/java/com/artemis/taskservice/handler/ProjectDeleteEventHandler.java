@@ -1,4 +1,4 @@
-﻿package com.artemis.taskservice.handler;
+package com.artemis.taskservice.handler;
 
 import com.artemis.taskservice.entity.ProcessedEventEntity;
 import com.artemis.taskservice.repository.ProcessedRepository;

@@ -1,4 +1,4 @@
-﻿package com.artemis.authservice.util;
+package com.artemis.authservice.util;
 
 import com.artemis.authservice.util.exception.EntityNotFoundException;
 import com.artemis.authservice.util.exception.UserEntityAlreadyExistsException;

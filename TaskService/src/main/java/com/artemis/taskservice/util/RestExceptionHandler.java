@@ -1,4 +1,4 @@
-﻿package com.artemis.taskservice.util;
+package com.artemis.taskservice.util;
 
 import com.artemis.taskservice.util.exception.AccessDeniedException;
 import com.artemis.taskservice.util.exception.TaskEntityNotFoundException;

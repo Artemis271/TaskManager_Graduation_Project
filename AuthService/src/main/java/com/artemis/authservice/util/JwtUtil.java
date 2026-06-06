@@ -1,4 +1,4 @@
-﻿package com.artemis.authservice.util;
+package com.artemis.authservice.util;
 
 import com.artemis.authservice.models.AuthValidationResponse;
 import com.artemis.authservice.models.MyUserDetails;

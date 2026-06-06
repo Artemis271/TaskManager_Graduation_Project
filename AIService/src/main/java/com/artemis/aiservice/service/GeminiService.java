@@ -1,4 +1,4 @@
-﻿package com.artemis.aiservice.service;
+package com.artemis.aiservice.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;

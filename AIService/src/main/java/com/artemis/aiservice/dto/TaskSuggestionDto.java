@@ -1,4 +1,4 @@
-﻿package com.artemis.aiservice.dto;
+package com.artemis.aiservice.dto;
 
 public record TaskSuggestionDto(
         String name,

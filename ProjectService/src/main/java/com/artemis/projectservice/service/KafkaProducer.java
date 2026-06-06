@@ -1,4 +1,4 @@
-﻿package com.artemis.projectservice.service;
+package com.artemis.projectservice.service;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.producer.ProducerRecord;

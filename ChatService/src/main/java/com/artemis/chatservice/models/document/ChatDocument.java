@@ -1,4 +1,4 @@
-﻿package com.artemis.chatservice.models.document;
+package com.artemis.chatservice.models.document;
 
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;

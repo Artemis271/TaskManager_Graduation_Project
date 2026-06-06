@@ -1,4 +1,4 @@
-﻿package com.artemis.chatservice.controller;
+package com.artemis.chatservice.controller;
 
 import com.artemis.chatservice.enums.ChatAction;
 import com.artemis.chatservice.models.dto.MessageInputDto;

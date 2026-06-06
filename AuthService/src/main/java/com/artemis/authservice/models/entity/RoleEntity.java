@@ -1,4 +1,4 @@
-﻿package com.artemis.authservice.models.entity;
+package com.artemis.authservice.models.entity;
 
 import com.artemis.authservice.enums.RoleType;
 import jakarta.persistence.*;

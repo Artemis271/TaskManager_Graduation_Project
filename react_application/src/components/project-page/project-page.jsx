@@ -1,6 +1,7 @@
 import {useCallback, useEffect, useRef, useState} from "react";
 import {CiCirclePlus} from "react-icons/ci";
 import {RiRobot2Line} from "react-icons/ri";
+import {LuArrowLeft} from "react-icons/lu";
 import axios, {HttpStatusCode} from "axios";
 import './project-page.css';
 import TaskCard from "../task-card/task-card";
@@ -21,6 +22,12 @@ const COLUMNS = [
     {key: 'EXPIRED',     label: 'Просрочено'},
 ];
 
+const STATUS_LABEL = {
+    PLANING: 'Планирование', IN_PROGRESS: 'В работе',
+    COMPLETED: 'Завершено',  CANCELED: 'Отменено', EXPIRED: 'Просрочено',
+};
+const IMPORTANCE_LABEL = {LOW: 'Низкая', INTERMEDIATE: 'Средняя', HIGH: 'Высокая'};
+
 const backHost = process.env.REACT_APP_BACKEND_PROJECT_SERVICE_HOST;
 const backPort = process.env.REACT_APP_BACKEND_PORT;
 
@@ -30,6 +37,7 @@ export default function ProjectPage() {
     const navigate = useNavigate();
 
     const [tasks, setTasks]               = useState([]);
+    const [project, setProject]           = useState(null);
     const [loading, setLoading]           = useState(true);
     const [projectExists, setProjectExists] = useState(true);
     const [projectList, setProjects]      = useState([]);
@@ -51,7 +59,10 @@ export default function ProjectPage() {
                 axios.get(`http://${backHost}:${backPort}/api/tasks/allTaskStatus`),
             ]);
 
-            if (projectRes.status === HttpStatusCode.Ok) setProjectExists(true);
+            if (projectRes.status === HttpStatusCode.Ok) {
+                setProjectExists(true);
+                setProject(projectRes.data);
+            }
             if (importanceRes.status === HttpStatusCode.Ok && statusRes.status === HttpStatusCode.Ok)
                 setTaskStatusImportance({importance: importanceRes.data, status: statusRes.data});
 
@@ -75,9 +86,9 @@ export default function ProjectPage() {
     }, [projectId, fetchTasks]);
 
     const filteredTasks = tasks.filter(t => {
-        const statusMatch = statusFilter ? t.taskStatus === statusFilter : true;
+        const statusMatch     = statusFilter     ? t.taskStatus     === statusFilter     : true;
         const importanceMatch = importanceFilter ? t.taskImportance === importanceFilter : true;
-        const finishedMatch = isFinished === null ? true : t.isFinished === isFinished;
+        const finishedMatch   = isFinished === null ? true : t.isFinished === isFinished;
         return statusMatch && importanceMatch && finishedMatch;
     });
 
@@ -88,13 +99,22 @@ export default function ProjectPage() {
         );
     };
 
+    const coverAvatar = project?.avatars?.[0];
+
     if (loading) return <div style={{padding: '2rem', color: 'var(--text-muted)'}}>Загрузка...</div>;
     if (!projectExists) return <Http404/>;
 
     return (
         <div className="project-layout">
+
+            {/* ── Sidebar ── */}
             <aside className="project-sidebar">
-                <h3>Проекты</h3>
+                <button className="sidebar-back" onClick={() => navigate('/projects')}>
+                    <LuArrowLeft/> К проектам
+                </button>
+
+                <p className="sidebar-label">Другие проекты</p>
+
                 <Autosuggest
                     suggestions={projSuggestions}
                     onSuggestionsFetchRequested={({value}) => setProjSuggestions(getProjSuggestions(value))}
@@ -109,6 +129,7 @@ export default function ProjectPage() {
                     }}
                     onSuggestionSelected={(_, {suggestion}) => navigate(`/projects/${suggestion.id}`)}
                 />
+
                 <ul>
                     {projectList.filter(p => p.id !== projectId).map(p => (
                         <li key={p.id}>
@@ -118,11 +139,53 @@ export default function ProjectPage() {
                 </ul>
             </aside>
 
+            {/* ── Main ── */}
             <div className="project-main">
+
+                {/* Project header */}
+                <div className="project-header">
+                    {coverAvatar && (
+                        <img
+                            className="project-header__cover"
+                            src={`data:${coverAvatar.contentType};base64,${coverAvatar.binaryData}`}
+                            alt={project.name}
+                        />
+                    )}
+                    <div className="project-header__info">
+                        <h1 className="project-header__name">{project?.name}</h1>
+                        {project?.description && (
+                            <p className="project-header__desc">{project.description}</p>
+                        )}
+                    </div>
+                    <div className="project-header__stats">
+                        <div className="project-stat">
+                            <span className="project-stat__value">{tasks.length}</span>
+                            <span className="project-stat__label">задач</span>
+                        </div>
+                        <div className="project-stat">
+                            <span className="project-stat__value">
+                                {tasks.filter(t => t.taskStatus === 'COMPLETED').length}
+                            </span>
+                            <span className="project-stat__label">завершено</span>
+                        </div>
+                        <div className="project-stat">
+                            <span className="project-stat__value">
+                                {tasks.filter(t => t.taskStatus === 'IN_PROGRESS').length}
+                            </span>
+                            <span className="project-stat__label">в работе</span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Toolbar */}
                 <div className="task-toolbar">
                     <ModalWindow
                         style={{padding: 0, width: '420px'}}
-                        trigger={<Button title="Новая задача"><CiCirclePlus/></Button>}>
+                        trigger={
+                            <button className="toolbar-btn toolbar-btn--primary" title="Новая задача">
+                                <CiCirclePlus/> Задача
+                            </button>
+                        }>
                         {({close}) => (
                             <TaskForm
                                 style={{width: '100%'}}
@@ -140,7 +203,11 @@ export default function ProjectPage() {
                     </ModalWindow>
 
                     <ModalWindow
-                        trigger={<Button title="AI декомпозиция"><RiRobot2Line/></Button>}>
+                        trigger={
+                            <button className="toolbar-btn" title="AI декомпозиция">
+                                <RiRobot2Line/> ИИ
+                            </button>
+                        }>
                         {({close}) => (
                             <AiDecompose
                                 projectId={projectId}
@@ -149,15 +216,27 @@ export default function ProjectPage() {
                         )}
                     </ModalWindow>
 
-                    <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}>
-                        <option value="">Все статусы</option>
-                        {taskStatusImportance.status.map(s => <option key={s}>{s}</option>)}
-                    </select>
+                    <div className="toolbar-divider"/>
 
-                    <select value={importanceFilter} onChange={e => setImportanceFilter(e.target.value)}>
-                        <option value="">Все важности</option>
-                        {taskStatusImportance.importance.map(i => <option key={i}>{i}</option>)}
-                    </select>
+                    <div className="toolbar-filter">
+                        <label>Статус</label>
+                        <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}>
+                            <option value="">Все</option>
+                            {taskStatusImportance.status.map(s => (
+                                <option key={s} value={s}>{STATUS_LABEL[s] || s}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="toolbar-filter">
+                        <label>Важность</label>
+                        <select value={importanceFilter} onChange={e => setImportanceFilter(e.target.value)}>
+                            <option value="">Все</option>
+                            {taskStatusImportance.importance.map(i => (
+                                <option key={i} value={i}>{IMPORTANCE_LABEL[i] || i}</option>
+                            ))}
+                        </select>
+                    </div>
 
                     <div className="toggle-wrapper">
                         <label htmlFor="finish-toggle">Завершённые</label>
@@ -175,6 +254,7 @@ export default function ProjectPage() {
                     </div>
                 </div>
 
+                {/* Board */}
                 {tasks.length === 0 ? (
                     <div className="project-empty">
                         <p>Проект пустой — создайте первую задачу</p>

@@ -1,4 +1,4 @@
-﻿package com.artemis.projectservice.mapper;
+package com.artemis.projectservice.mapper;
 
 import com.artemis.projectservice.dto.ProjectDto;
 import com.artemis.projectservice.dto.ProjectInputDto;

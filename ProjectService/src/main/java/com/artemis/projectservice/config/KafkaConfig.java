@@ -1,4 +1,4 @@
-﻿package com.artemis.projectservice.config;
+package com.artemis.projectservice.config;
 
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;

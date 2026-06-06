@@ -1,4 +1,4 @@
-﻿package com.artemis.taskservice.util.exception;
+package com.artemis.taskservice.util.exception;
 
 import lombok.experimental.StandardException;
 

@@ -1,4 +1,4 @@
-﻿package com.artemis.chatservice.handler;
+package com.artemis.chatservice.handler;
 
 import com.artemis.chatservice.service.UserService;
 import com.artemis.core.events.UserCreatedEvent;

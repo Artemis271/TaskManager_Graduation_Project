@@ -1,4 +1,4 @@
-﻿package com.artemis.chatservice.config;
+package com.artemis.chatservice.config;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;

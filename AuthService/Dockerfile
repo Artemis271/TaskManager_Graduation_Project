@@ -7,6 +7,7 @@ COPY Core/src Core/src
 RUN for i in 1 2 3; do mvn -f Core/pom.xml clean install -DskipTests -B && break || sleep 15; done
 
 COPY AuthService/pom.xml AuthService/pom.xml
+ARG CACHEBUST=1
 COPY AuthService/src AuthService/src
 RUN for i in 1 2 3; do mvn -f AuthService/pom.xml clean package spring-boot:repackage -DskipTests -B && break || sleep 15; done
 

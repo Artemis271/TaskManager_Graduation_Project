@@ -1,4 +1,4 @@
-﻿package com.artemis.authservice.service.kafka;
+package com.artemis.authservice.service.kafka;
 
 import com.artemis.authservice.models.entity.AvatarEntity;
 import com.artemis.authservice.models.entity.UserEntity;

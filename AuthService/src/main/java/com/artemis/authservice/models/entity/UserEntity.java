@@ -1,4 +1,4 @@
-﻿package com.artemis.authservice.models.entity;
+package com.artemis.authservice.models.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

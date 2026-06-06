@@ -1,4 +1,4 @@
-﻿package com.artemis.taskservice.dto;
+package com.artemis.taskservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

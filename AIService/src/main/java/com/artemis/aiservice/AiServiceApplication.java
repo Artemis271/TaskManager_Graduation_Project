@@ -1,4 +1,4 @@
-﻿package com.artemis.aiservice;
+package com.artemis.aiservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

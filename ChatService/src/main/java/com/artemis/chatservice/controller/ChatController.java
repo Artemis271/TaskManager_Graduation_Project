@@ -1,4 +1,4 @@
-﻿package com.artemis.chatservice.controller;
+package com.artemis.chatservice.controller;
 
 import com.artemis.chatservice.models.document.ChatDocument;
 import com.artemis.chatservice.models.document.UserDocument;

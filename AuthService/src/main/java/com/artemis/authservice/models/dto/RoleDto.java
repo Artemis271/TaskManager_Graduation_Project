@@ -1,4 +1,4 @@
-﻿package com.artemis.authservice.models.dto;
+package com.artemis.authservice.models.dto;
 
 import com.artemis.authservice.enums.RoleType;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

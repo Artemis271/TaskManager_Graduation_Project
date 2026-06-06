@@ -1,4 +1,4 @@
-﻿package com.artemis.taskservice.sevice;
+package com.artemis.taskservice.sevice;
 
 import com.artemis.taskservice.dto.TaskChartDto;
 import com.artemis.taskservice.dto.TaskDto;

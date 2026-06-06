@@ -143,12 +143,11 @@ export default function WebChat() {
                 : <>
                     <h3 className="web-chat-header">Task-Manager</h3>
                     <div className="web-chat-options">
-                        <select>
+                        <select
+                            value={currentChatId || ''}
+                            onChange={e => setCurrentChatId(e.target.value)}>
                             {chats.map(chat => (
-                                <option
-                                    key={chat.id}
-                                    className={chat.id === currentChatId ? "active" : ""}
-                                    onClick={() => setCurrentChatId(chat.id)}>
+                                <option key={chat.id} value={chat.id}>
                                     {chat.title}
                                 </option>
                             ))}

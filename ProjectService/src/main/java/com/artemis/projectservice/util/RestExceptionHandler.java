@@ -1,4 +1,4 @@
-﻿package com.artemis.projectservice.util;
+package com.artemis.projectservice.util;
 
 import com.artemis.projectservice.util.exception.AccessDeniedException;
 import com.artemis.projectservice.util.exception.ProjectEntityNotFoundException;

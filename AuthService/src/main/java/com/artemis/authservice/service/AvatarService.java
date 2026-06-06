@@ -1,9 +1,8 @@
-﻿package com.artemis.authservice.service;
+package com.artemis.authservice.service;
 
 import com.artemis.authservice.models.entity.AvatarEntity;
 import com.artemis.authservice.repository.AvatarRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -54,16 +53,21 @@ public class AvatarService
                 .collect(Collectors.toList());
     }
 
-    @SneakyThrows
     public byte[] compressImage(byte[] inputBytes)
     {
         final int MIN_BYTE_SIZE_COMPRESSION = 20_000;
 
         if (inputBytes.length < MIN_BYTE_SIZE_COMPRESSION)
             return inputBytes;
-        BufferedImage image = ImageIO.read(new ByteArrayInputStream(inputBytes));
+
+        BufferedImage image;
+        try {
+            image = ImageIO.read(new ByteArrayInputStream(inputBytes));
+        } catch (Exception e) {
+            return inputBytes;
+        }
         if (image == null)
-            throw new IllegalArgumentException("Incorrect image");
+            return inputBytes;
         image = resizeImageWithAspectRatio(image);
 
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -79,6 +83,8 @@ public class AvatarService
             writer.dispose();
 
             return outputStream.toByteArray();
+        } catch (Exception e) {
+            return inputBytes;
         }
     }
 

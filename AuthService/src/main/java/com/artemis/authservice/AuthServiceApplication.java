@@ -1,4 +1,4 @@
-﻿package com.artemis.authservice;
+package com.artemis.authservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

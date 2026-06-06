@@ -1,4 +1,4 @@
-﻿package com.artemis.projectservice.service;
+package com.artemis.projectservice.service;
 
 import com.artemis.projectservice.entity.AvatarEntity;
 import com.artemis.projectservice.repository.AvatarRepository;
@@ -25,6 +25,7 @@ public class AvatarService
 
     public List<AvatarEntity> multipartToEntity(List<MultipartFile> file)
     {
+        if (file == null) return List.of();
         return file.stream()
                 .map(image -> {
                     AvatarEntity avatar = new AvatarEntity();

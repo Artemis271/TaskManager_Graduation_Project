@@ -1,4 +1,4 @@
-﻿package com.artemis.taskservice.sevice.kafka;
+package com.artemis.taskservice.sevice.kafka;
 
 import com.artemis.core.events.TaskCreatedEvent;
 import com.artemis.core.events.TaskStatusChangedEvent;

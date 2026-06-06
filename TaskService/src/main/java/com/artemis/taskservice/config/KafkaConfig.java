@@ -1,4 +1,4 @@
-﻿package com.artemis.taskservice.config;
+package com.artemis.taskservice.config;
 
 import lombok.AllArgsConstructor;
 import org.apache.kafka.clients.consumer.ConsumerConfig;

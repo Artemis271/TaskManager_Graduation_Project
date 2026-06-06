@@ -1,4 +1,4 @@
-﻿package com.artemis.projectservice.entity;
+package com.artemis.projectservice.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -55,6 +55,7 @@ public class ProjectEntity
 
     public void setAvatars(List<AvatarEntity> avatars)
     {
+        if (avatars == null) return;
         for (AvatarEntity avatar : avatars)
             avatar.setProject(this);
         this.avatars = avatars;

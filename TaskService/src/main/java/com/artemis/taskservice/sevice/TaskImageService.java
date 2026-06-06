@@ -1,4 +1,4 @@
-﻿package com.artemis.taskservice.sevice;
+package com.artemis.taskservice.sevice;
 
 import com.artemis.taskservice.entity.TaskImageEntity;
 import com.artemis.taskservice.repository.TaskImageRepository;

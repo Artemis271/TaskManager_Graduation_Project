@@ -1,4 +1,4 @@
-﻿package com.artemis.projectservice.dto;
+package com.artemis.projectservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 

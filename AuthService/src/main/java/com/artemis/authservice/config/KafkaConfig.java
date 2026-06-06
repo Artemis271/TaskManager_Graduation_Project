@@ -1,4 +1,4 @@
-﻿package com.artemis.authservice.config;
+package com.artemis.authservice.config;
 
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;

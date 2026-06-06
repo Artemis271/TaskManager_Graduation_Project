@@ -1,4 +1,4 @@
-﻿package com.artemis.authservice.models;
+package com.artemis.authservice.models;
 
 import lombok.Builder;
 

@@ -1,178 +1,249 @@
-/* Decorative blobs */
+/* ── Decorative blobs ─────────────────────────────────── */
 .account-square {
     position: absolute;
     background: var(--accent);
-    width: 90px;
-    height: 90px;
-    opacity: 0.07;
+    width: 90px; height: 90px;
+    opacity: 0.06;
     border-radius: 14px;
     transform: rotate(-25deg);
-    left: 8rem;
-    top: 6rem;
+    left: 6rem; top: 5rem;
     pointer-events: none;
 }
-
 .account-ellipsis {
     position: absolute;
     background: var(--accent);
-    width: 140px;
-    height: 90px;
-    opacity: 0.05;
+    width: 160px; height: 100px;
+    opacity: 0.04;
     border-radius: 50%;
     transform: rotate(30deg);
-    right: 12rem;
-    top: 12rem;
+    right: 10rem; top: 10rem;
     pointer-events: none;
 }
-
 .account-circle {
     position: absolute;
     background: var(--accent);
-    width: 110px;
-    height: 110px;
-    opacity: 0.05;
+    width: 120px; height: 120px;
+    opacity: 0.04;
     border-radius: 50%;
-    bottom: 4rem;
-    left: 20rem;
+    bottom: 3rem; left: 18rem;
     pointer-events: none;
 }
 
-/* Main card */
+/* ── Page wrapper ─────────────────────────────────────── */
+.main {
+    padding: 2rem 6%;
+    position: relative;
+}
+
+/* ── Main card ────────────────────────────────────────── */
 .account-data {
-    max-width: 960px;
-    margin: 2rem auto;
-    padding: 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+    position: relative;
+}
+
+/* ── Profile header ───────────────────────────────────── */
+.account-profile-header {
     background: var(--bg-elevated);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-md);
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 1.5rem;
+    padding: 1.8rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
     position: relative;
     overflow: hidden;
 }
 
-/* Info section */
-.account-main-info {
+.account-profile-header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #7c3aed, #a78bfa, #7c3aed);
+}
+
+.account-avatar-block {
+    flex-shrink: 0;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    grid-row: span 2;
-    grid-column: 1;
+    align-items: center;
+    gap: 0.5rem;
 }
 
-.account-main-info div,
-.account-main-info .tasks div {
-    font-weight: 400;
-    font-size: 0.9rem;
+.account-name-block {
+    flex: 1;
 }
 
-/* Info groups */
-.account-data-group-1,
-.account-data-group-2 {
-    background: var(--bg-input);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 12px 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+.account-display-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0 0 0.3rem 0;
 }
 
-.account-data-group-inner {
+.account-username-line {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    margin: 0 0 0.8rem 0;
     display: flex;
     align-items: center;
-    gap: 6px;
-    font-size: 0.88rem;
-    color: var(--text);
+    gap: 5px;
 }
 
-.account-data-group-inner span {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-/* Activity (inline bg applied via JSX) */
-.account-activity {
-    border-radius: var(--radius);
-    padding: 10px 16px;
-    font-size: 0.88rem;
-    font-weight: 500;
-    color: var(--text);
-}
-
-/* Roles */
-.account-roles {
-    background: var(--accent-light);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 10px 16px;
-    font-size: 0.88rem;
-    color: var(--accent);
-    font-weight: 500;
-}
-
-/* Buttons container */
-.account-buttons-container {
-    grid-row: 2;
-    grid-column: 2;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    align-items: flex-start;
-    justify-content: flex-start;
-}
-
-/* Task info badges */
-.account-task-info {
+.account-badges {
     display: flex;
     flex-wrap: wrap;
+    gap: 6px;
+}
+
+.account-role-badge {
+    background: var(--accent-light);
+    color: var(--accent);
+    border: 1px solid rgba(124, 58, 237, 0.25);
+    border-radius: 20px;
+    padding: 3px 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+
+.account-activity-badge {
+    border-radius: 20px;
+    padding: 3px 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.account-activity-badge.active {
+    background: rgba(52, 211, 153, 0.12);
+    color: #059669;
+    border: 1px solid rgba(52, 211, 153, 0.3);
+}
+.account-activity-badge.inactive {
+    background: rgba(239, 68, 68, 0.1);
+    color: #dc2626;
+    border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+/* ── Two-column body ──────────────────────────────────── */
+.account-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.4rem;
+}
+
+/* ── Info card ────────────────────────────────────────── */
+.account-info-card {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: 1.4rem 1.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.account-info-card-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    margin: 0 0 0.2rem 0;
+}
+
+.account-data-row {
+    display: flex;
+    align-items: center;
     gap: 8px;
+    font-size: 0.88rem;
+    color: var(--text);
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+}
+.account-data-row:last-child {
+    border-bottom: none;
+}
+.account-data-row svg {
+    color: var(--accent);
+    flex-shrink: 0;
+    font-size: 1rem;
+}
+.account-data-row strong {
+    color: var(--text-muted);
+    font-weight: 500;
+    min-width: 80px;
+}
+
+/* ── Task stats card ──────────────────────────────────── */
+.account-stats-card {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: 1.4rem 1.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.account-task-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
 }
 
 .account-task-info-item {
-    padding: 7px 14px;
+    padding: 8px 14px;
     border-radius: var(--radius);
-    font-size: 0.78rem;
+    font-size: 0.82rem;
     font-weight: 600;
     border: 1px solid transparent;
     transition: box-shadow 0.2s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
-
-.account-task-info-item:hover {
-    box-shadow: var(--shadow-sm);
-}
+.account-task-info-item:hover { box-shadow: var(--shadow-sm); }
 
 .account-task-planing {
     background: var(--col-plan-bg);
     color: var(--col-plan-accent);
     border-color: var(--col-plan-accent);
 }
-
 .account-task-in-progress {
     background: var(--col-progress-bg);
     color: var(--col-progress-accent);
     border-color: var(--col-progress-accent);
 }
-
 .account-task-finished {
     background: var(--col-done-bg);
     color: var(--col-done-accent);
     border-color: var(--col-done-accent);
 }
-
 .account-task-canceled {
     background: var(--col-cancel-bg);
     color: var(--col-cancel-accent);
     border-color: var(--col-cancel-accent);
 }
-
 .account-task-expired {
     background: var(--col-expired-bg);
     color: var(--col-expired-accent);
     border-color: var(--col-expired-accent);
+}
+
+.account-task-count {
+    font-size: 1rem;
+    font-weight: 800;
 }
 
 .account-error-fetch-tasks {
@@ -186,47 +257,35 @@
     text-align: center;
 }
 
-/* Button groups */
-.group-buttons {
+/* ── Actions card ─────────────────────────────────────── */
+.account-actions-card {
+    grid-column: span 2;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: 1.2rem 1.6rem;
     display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.group-buttons-main-func {
-    display: flex;
+    align-items: center;
+    gap: 0.8rem;
     flex-wrap: wrap;
-    gap: 0;
 }
 
-/* SVG decoration */
-.svg-image {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    opacity: 0.12;
-    pointer-events: none;
+.account-actions-card .btn-danger {
+    margin-left: auto;
 }
 
-/* Avatar-related (used by AvatarSlider via account.css import) */
-.avatar-wrapper {
-    display: flex;
-}
-
-.avatar-wrapper-1 {
-    position: relative;
-    padding: 0 1em;
-}
+/* ── Avatar (from AvatarSlider) ───────────────────────── */
+.avatar-wrapper       { display: flex; }
+.avatar-wrapper-1     { position: relative; padding: 0 1em; }
 
 .avatar-link {
-    position: relative;
-    width: 180px;
-    height: 180px;
+    width: 110px; height: 110px;
     border-radius: 50%;
-    margin: 0.5em 0;
     object-fit: cover;
     object-position: center;
-    border: 2px solid var(--border);
+    border: 3px solid var(--accent);
+    box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.15);
 }
 
 .account-previous-image,
@@ -238,12 +297,18 @@
     color: var(--text-muted);
     transition: color 0.2s, transform 0.2s;
 }
-
 .account-previous-image { left: 0; }
-.account-next-image    { right: 0; }
-
+.account-next-image     { right: 0; }
 .account-previous-image:hover,
 .account-next-image:hover {
     color: var(--accent);
     transform: scale(1.2);
+}
+
+/* ── Responsive ───────────────────────────────────────── */
+@media (max-width: 680px) {
+    .account-body { grid-template-columns: 1fr; }
+    .account-actions-card { grid-column: span 1; }
+    .account-profile-header { flex-direction: column; text-align: center; }
+    .account-badges { justify-content: center; }
 }

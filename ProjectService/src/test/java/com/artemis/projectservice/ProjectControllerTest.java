@@ -1,4 +1,4 @@
-﻿package com.artemis.projectservice;
+package com.artemis.projectservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -69,19 +69,13 @@ public class ProjectControllerTest
     {
         UUID id = UUID.randomUUID();
         ProjectDto dto = new ProjectDto(
-                id,
-                "Project1",
-                "Desc",
-                LocalDate.now(),
-                LocalDate.now(),
-                List.of()
+                id, "Project1", "Desc", LocalDate.now(), LocalDate.now(), List.of()
         );
-        given(projectService.getAll(PageRequest.of(0, 15,
-                Sort.by("dateAdded")), 42L))
+        given(projectService.getAll(PageRequest.of(0, 15, Sort.by("dateAdded")), 42L))
                 .willReturn(List.of(dto));
 
         mockMvc.perform(get("/projects/allProjects")
-                        .param("userId", "42"))
+                        .header("X-User-Id", "42"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(List.of(dto))));
@@ -92,21 +86,15 @@ public class ProjectControllerTest
     {
         UUID id = UUID.randomUUID();
         ProjectDto dto = new ProjectDto(
-                id,
-                "P2",
-                "D2",
-                LocalDate.now(),
-                LocalDate.now(),
-                List.of()
+                id, "P2", "D2", LocalDate.now(), LocalDate.now(), List.of()
         );
-        given(projectService.getAll(PageRequest.of(2, 5,
-                Sort.by("dateAdded")), 7L))
+        given(projectService.getAll(PageRequest.of(2, 5, Sort.by("dateAdded")), 7L))
                 .willReturn(List.of(dto));
 
         mockMvc.perform(get("/projects/allProjects")
                         .param("pageNumber", "2")
                         .param("size", "5")
-                        .param("userId", "7"))
+                        .header("X-User-Id", "7"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(List.of(dto))));
     }
@@ -115,63 +103,49 @@ public class ProjectControllerTest
     void getProject_Success() throws Exception
     {
         UUID id = UUID.randomUUID();
+        Long userId = 42L;
         ProjectDto dto = new ProjectDto(
-                id,
-                "Proj",
-                "Desc",
-                LocalDate.now(),
-                LocalDate.now(),
-                List.of()
+                id, "Proj", "Desc", LocalDate.now(), LocalDate.now(), List.of()
         );
-        given(projectService.getProject(id)).willReturn(dto);
+        given(projectService.getProject(id, userId)).willReturn(dto);
 
         mockMvc.perform(get("/projects/" + id)
-                        .header("X-Roles", "ROLE_USER"))
+                        .header("X-User-Id", userId))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(dto)));
     }
 
     @Test
-    void getProject_Forbidden_NoRole() throws Exception
+    void getProject_MissingUserId() throws Exception
     {
         UUID id = UUID.randomUUID();
         mockMvc.perform(get("/projects/" + id))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isBadRequest());
     }
 
     @Test
-    void getProject_Forbidden_InvalidRole() throws Exception
+    void getAllProjectsAdmin_Forbidden() throws Exception
     {
-        UUID id = UUID.randomUUID();
-        mockMvc.perform(get("/projects/" + id)
-                        .header("X-Roles", "ROLE_ADMIN"))
+        mockMvc.perform(get("/projects/admin/all")
+                        .header("X-Roles", "ROLE_USER"))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     void createProject() throws Exception
     {
-        ProjectInputDto input = new ProjectInputDto(
-                "New",
-                "Desc",
-                List.of(),
-                99L
-        );
+        Long userId = 99L;
+        ProjectInputDto input = new ProjectInputDto("New", "Desc", List.of());
         ProjectDto created = new ProjectDto(
-                UUID.randomUUID(),
-                "New",
-                "Desc",
-                LocalDate.now(),
-                LocalDate.now(),
-                List.of()
+                UUID.randomUUID(), "New", "Desc", LocalDate.now(), LocalDate.now(), List.of()
         );
-        given(projectService.createProject(any(ProjectInputDto.class))).willReturn(created);
+        given(projectService.createProject(any(ProjectInputDto.class), eq(userId))).willReturn(created);
 
         mockMvc.perform(multipart("/projects/createProject")
                         .characterEncoding("UTF-8")
                         .param("name", input.name())
                         .param("description", input.description())
-                        .param("userId", input.userId().toString())
+                        .header("X-User-Id", userId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(content().json(objectMapper.writeValueAsString(created)));
@@ -181,20 +155,12 @@ public class ProjectControllerTest
     void updateProject() throws Exception
     {
         UUID id = UUID.randomUUID();
-        ProjectUpdateDto update = new ProjectUpdateDto(
-                "Upd",
-                "DescU",
-                List.of()
-        );
+        Long userId = 1L;
+        ProjectUpdateDto update = new ProjectUpdateDto("Upd", "DescU", List.of());
         ProjectDto updated = new ProjectDto(
-                id,
-                "Upd",
-                "DescU",
-                LocalDate.now(),
-                LocalDate.now(),
-                List.of()
+                id, "Upd", "DescU", LocalDate.now(), LocalDate.now(), List.of()
         );
-        given(projectService.updateProject(eq(id), any(ProjectUpdateDto.class)))
+        given(projectService.updateProject(eq(id), any(ProjectUpdateDto.class), eq(userId)))
                 .willReturn(updated);
 
         mockMvc.perform(multipart("/projects/update/" + id)
@@ -202,6 +168,7 @@ public class ProjectControllerTest
                         .characterEncoding("UTF-8")
                         .param("name", update.name())
                         .param("description", update.description())
+                        .header("X-User-Id", userId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -212,9 +179,11 @@ public class ProjectControllerTest
     void deleteProject() throws Exception
     {
         UUID id = UUID.randomUUID();
-        doNothing().when(projectService).deleteProject(id);
+        Long userId = 1L;
+        doNothing().when(projectService).deleteProject(id, userId);
 
-        mockMvc.perform(delete("/projects/delete/" + id))
+        mockMvc.perform(delete("/projects/delete/" + id)
+                        .header("X-User-Id", userId))
                 .andExpect(status().isNoContent());
     }
 }

@@ -3,8 +3,7 @@ import Button from "../button/button";
 import axios from "axios";
 import ModalWindow from "../modal-window/modal-window";
 import TaskForm from "../task-form/task-form";
-import {GiCheckMark} from "react-icons/gi";
-import {ImCross} from "react-icons/im";
+import {FaCalendarAlt} from "react-icons/fa";
 
 const IMPORTANCE_LABEL = {LOW: 'Низкая', INTERMEDIATE: 'Средняя', HIGH: 'Высокая'};
 
@@ -53,11 +52,11 @@ export default function TaskCard({task, avatars, onRefresh}) {
                 <span className={`badge badge--${importance}`}>
                     {IMPORTANCE_LABEL[task.taskImportance] || task.taskImportance}
                 </span>
-                <span className={`badge ${task.isFinished ? 'badge--finished' : 'badge--unfinished'}`}>
-                    {task.isFinished ? <GiCheckMark/> : <ImCross/>}
-                </span>
                 {task.dateFinished && (
-                    <span className="task-card__date">{task.dateFinished}</span>
+                    <span className="task-card__date">
+                        <FaCalendarAlt style={{marginRight: 4, verticalAlign: 'middle'}}/>
+                        {task.dateFinished}
+                    </span>
                 )}
             </div>
 

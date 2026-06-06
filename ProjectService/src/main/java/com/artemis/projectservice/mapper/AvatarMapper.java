@@ -1,4 +1,4 @@
-﻿package com.artemis.projectservice.mapper;
+package com.artemis.projectservice.mapper;
 
 import com.artemis.projectservice.dto.AvatarDto;
 import com.artemis.projectservice.entity.AvatarEntity;

@@ -1,4 +1,4 @@
-﻿package com.artemis.authservice.models;
+package com.artemis.authservice.models;
 
 import com.artemis.authservice.models.entity.RoleEntity;
 import com.artemis.authservice.models.entity.UserEntity;

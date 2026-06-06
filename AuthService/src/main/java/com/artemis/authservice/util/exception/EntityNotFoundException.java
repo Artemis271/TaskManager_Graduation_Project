@@ -1,4 +1,4 @@
-﻿package com.artemis.authservice.util.exception;
+package com.artemis.authservice.util.exception;
 
 import lombok.experimental.StandardException;
 

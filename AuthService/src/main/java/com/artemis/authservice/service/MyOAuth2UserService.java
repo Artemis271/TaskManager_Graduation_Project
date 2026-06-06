@@ -1,4 +1,4 @@
-﻿package com.artemis.authservice.service;
+package com.artemis.authservice.service;
 
 import com.artemis.authservice.models.entity.UserEntity;
 import com.artemis.authservice.models.oauth2.OAuth2UserInfo;

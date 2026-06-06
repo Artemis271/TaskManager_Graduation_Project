@@ -1,4 +1,4 @@
-﻿package com.artemis.authservice.mapper;
+package com.artemis.authservice.mapper;
 
 import com.artemis.authservice.models.dto.UserDto;
 import com.artemis.authservice.models.dto.UserInfoDto;

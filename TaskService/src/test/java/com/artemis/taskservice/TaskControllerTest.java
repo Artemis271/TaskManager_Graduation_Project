@@ -1,4 +1,4 @@
-﻿package com.artemis.taskservice;
+package com.artemis.taskservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -138,9 +138,9 @@ public class TaskControllerTest
     @Test
     void getTask_ById() throws Exception {
         UUID id = UUID.randomUUID();
+        Long userId = 1L;
         TaskDto dto = new TaskDto(id, "Name", "Desc", TaskImportance.HIGH,
                 TaskStatus.IN_PROGRESS, LocalDate.now(), LocalDate.now(), false, List.of());
-        Long userId = 1L;
         given(taskService.getTask(id, userId)).willReturn(dto);
 
         mockMvc.perform(get("/tasks/" + id)
@@ -149,16 +149,17 @@ public class TaskControllerTest
                 .andExpect(content().json(objectMapper.writeValueAsString(dto)));
     }
 
-     @Test
+    @Test
     void createTask() throws Exception {
         UUID pid = UUID.randomUUID();
+        Long userId = 1L;
         MockMultipartFile file = new MockMultipartFile("images", "img.png",
                 "image/png", "data".getBytes());
         TaskInputDto input = new TaskInputDto("N", "D", TaskImportance.LOW,
-                TaskStatus.PLANING, LocalDate.now(), List.of(file), pid);
+                TaskStatus.PLANING, LocalDate.now(), List.of(file), pid, null);
         TaskDto created = new TaskDto(UUID.randomUUID(), "N", "D", input.taskImportance(),
                 input.taskStatus(), LocalDate.now(), input.dateFinished(), false, List.of());
-        given(taskService.createTask(any(TaskInputDto.class))).willReturn(created);
+        given(taskService.createTask(any(TaskInputDto.class), eq(userId))).willReturn(created);
 
         mockMvc.perform(multipart("/tasks/createTask")
                         .file(file)
@@ -168,6 +169,7 @@ public class TaskControllerTest
                         .param("taskStatus", input.taskStatus().name())
                         .param("dateFinished", input.dateFinished().toString())
                         .param("projectId", pid.toString())
+                        .header("X-User-Id", userId)
                         .characterEncoding("UTF-8")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
@@ -177,16 +179,18 @@ public class TaskControllerTest
     @Test
     void updateTask() throws Exception {
         UUID id = UUID.randomUUID();
+        Long userId = 1L;
         TaskUpdateDto update = new TaskUpdateDto("U", "D", TaskImportance.HIGH,
                 TaskStatus.COMPLETED, LocalDate.now(), true);
         TaskDto updated = new TaskDto(id, update.name(), update.description(),
                 update.taskImportance(), update.taskStatus(), LocalDate.now(),
                 update.dateFinished(), update.isFinished(), List.of());
-        given(taskService.updateTask(eq(id), any(TaskUpdateDto.class))).willReturn(updated);
+        given(taskService.updateTask(eq(id), any(TaskUpdateDto.class), eq(userId))).willReturn(updated);
 
         mockMvc.perform(patch("/tasks/update/" + id)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(update)))
+                        .content(objectMapper.writeValueAsString(update))
+                        .header("X-User-Id", userId))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(updated)));
@@ -195,9 +199,11 @@ public class TaskControllerTest
     @Test
     void deleteTask() throws Exception {
         UUID id = UUID.randomUUID();
-        doNothing().when(taskService).deleteTask(id);
+        Long userId = 1L;
+        doNothing().when(taskService).deleteTask(id, userId);
 
-        mockMvc.perform(delete("/tasks/delete/" + id))
+        mockMvc.perform(delete("/tasks/delete/" + id)
+                        .header("X-User-Id", userId))
                 .andExpect(status().isNoContent());
     }
 

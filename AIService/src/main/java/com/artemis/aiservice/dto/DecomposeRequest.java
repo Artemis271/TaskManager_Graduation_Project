@@ -1,4 +1,4 @@
-﻿package com.artemis.aiservice.dto;
+package com.artemis.aiservice.dto;
 
 import java.util.UUID;
 

@@ -1,4 +1,4 @@
-﻿package com.artemis.authservice.models.oauth2;
+package com.artemis.authservice.models.oauth2;
 
 import lombok.RequiredArgsConstructor;
 

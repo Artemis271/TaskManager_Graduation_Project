@@ -1,3 +1,3 @@
-﻿package com.artemis.chatservice.models.dto;
+package com.artemis.chatservice.models.dto;
 
 public interface ResponseMessage {}

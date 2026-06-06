@@ -1,4 +1,4 @@
-﻿package com.artemis.projectservice.service;
+package com.artemis.projectservice.service;
 
 import com.artemis.projectservice.dto.ProjectDto;
 import com.artemis.projectservice.dto.ProjectInputDto;

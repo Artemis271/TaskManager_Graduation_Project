@@ -1,4 +1,4 @@
-﻿package com.artemis.taskservice.entity;
+package com.artemis.taskservice.entity;
 
 import com.artemis.taskservice.enums.TaskImportance;
 import com.artemis.taskservice.enums.TaskStatus;

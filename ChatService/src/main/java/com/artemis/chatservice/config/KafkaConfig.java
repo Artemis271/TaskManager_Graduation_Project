@@ -1,4 +1,4 @@
-﻿package com.artemis.chatservice.config;
+package com.artemis.chatservice.config;
 
 import lombok.AllArgsConstructor;
 import org.apache.kafka.clients.consumer.ConsumerConfig;

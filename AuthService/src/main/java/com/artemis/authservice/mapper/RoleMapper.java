@@ -1,4 +1,4 @@
-﻿package com.artemis.authservice.mapper;
+package com.artemis.authservice.mapper;
 
 import com.artemis.authservice.models.dto.RoleDto;
 import com.artemis.authservice.models.entity.RoleEntity;

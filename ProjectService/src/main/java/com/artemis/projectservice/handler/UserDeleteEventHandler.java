@@ -1,4 +1,4 @@
-﻿package com.artemis.projectservice.handler;
+package com.artemis.projectservice.handler;
 
 import com.artemis.projectservice.entity.ProcessedEventEntity;
 import com.artemis.projectservice.entity.ProjectEntity;

@@ -1,4 +1,4 @@
-﻿package com.artemis.authservice.enums;
+package com.artemis.authservice.enums;
 
 import org.springframework.security.core.GrantedAuthority;
 

@@ -1,4 +1,4 @@
-﻿package com.artemis.authservice.models.dto;
+package com.artemis.authservice.models.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.artemis.authservice.models.entity.AvatarEntity;

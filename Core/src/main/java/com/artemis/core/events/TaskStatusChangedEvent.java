@@ -1,4 +1,4 @@
-﻿package com.artemis.core.events;
+package com.artemis.core.events;
 
 import java.io.Serializable;
 import java.util.UUID;

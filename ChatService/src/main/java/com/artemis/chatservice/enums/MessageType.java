@@ -1,4 +1,4 @@
-﻿package com.artemis.chatservice.enums;
+package com.artemis.chatservice.enums;
 
 public enum MessageType
 {

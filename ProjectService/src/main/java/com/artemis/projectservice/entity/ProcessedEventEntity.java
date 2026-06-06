@@ -1,4 +1,4 @@
-﻿package com.artemis.projectservice.entity;
+package com.artemis.projectservice.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

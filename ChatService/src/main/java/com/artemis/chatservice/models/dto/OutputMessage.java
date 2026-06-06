@@ -1,4 +1,4 @@
-﻿package com.artemis.chatservice.models.dto;
+package com.artemis.chatservice.models.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.artemis.chatservice.enums.MessageType;

@@ -1,4 +1,4 @@
-﻿package com.artemis.aiservice.controller;
+package com.artemis.aiservice.controller;
 
 import com.artemis.aiservice.dto.DecomposeRequest;
 import com.artemis.aiservice.dto.TaskSuggestionDto;

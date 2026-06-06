@@ -1,4 +1,4 @@
-﻿package com.artemis.taskservice.util.exception;
+package com.artemis.taskservice.util.exception;
 
 public class AccessDeniedException extends RuntimeException
 {

@@ -1,4 +1,4 @@
-﻿package com.artemis.projectservice.util.exception;
+package com.artemis.projectservice.util.exception;
 
 public class AccessDeniedException extends RuntimeException
 {

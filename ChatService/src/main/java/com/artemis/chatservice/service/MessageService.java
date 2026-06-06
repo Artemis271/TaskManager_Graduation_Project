@@ -1,4 +1,4 @@
-﻿package com.artemis.chatservice.service;
+package com.artemis.chatservice.service;
 
 import com.mongodb.client.result.DeleteResult;
 import com.artemis.chatservice.models.document.MessageDocument;

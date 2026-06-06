@@ -1,4 +1,4 @@
-﻿package com.artemis.taskservice.enums;
+package com.artemis.taskservice.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

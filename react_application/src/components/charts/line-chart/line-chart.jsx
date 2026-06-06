@@ -1,59 +1,46 @@
 import {Line} from 'react-chartjs-2';
 import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend,
+    Chart as ChartJS, CategoryScale, LinearScale,
+    PointElement, LineElement, Title, Tooltip, Legend, Filler,
 } from 'chart.js';
 
-ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend
-);
-
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler);
 
 export default function LineChart({ label, data, labels })
 {
-    const hue = Math.floor(Math.random() * 360);
-    const bgColor     = `hsla(${hue}, 70%, 50%, 0.7)`;
-    const borderColor = `hsla(${hue}, 70%, 50%, 1)`;
-
     const options = {
         scales: {
             y: {
                 beginAtZero: true,
-                ticks: {
-                    stepSize: 1,
-                },
+                ticks: { stepSize: 1, color: '#9ca3af' },
+                grid: { color: 'rgba(124, 58, 237, 0.08)' },
+            },
+            x: {
+                ticks: { color: '#9ca3af', maxTicksLimit: 10 },
+                grid: { display: false },
             },
         },
+        plugins: {
+            legend: { labels: { color: '#6b7280', font: { size: 12 } } }
+        }
     };
 
     const chartData = {
-        labels: labels,
-        datasets: [
-            {
-                label: label,
-                data: data,
-                backgroundColor: bgColor,
-                borderWidth: 3,
-                borderColor: borderColor,
-                hoverOffset: 4,
-                tension: 0.1,
-                pointBackgroundColor: 'rgb(255,255,255)',
-                pointBorderColor: 'rgb(52,52,52)',
-            }
-        ],
+        labels,
+        datasets: [{
+            label,
+            data,
+            backgroundColor: 'rgba(124, 58, 237, 0.12)',
+            borderColor: 'rgba(124, 58, 237, 0.9)',
+            borderWidth: 2.5,
+            tension: 0.35,
+            fill: true,
+            pointBackgroundColor: '#fff',
+            pointBorderColor: 'rgba(124, 58, 237, 0.9)',
+            pointRadius: 4,
+            pointHoverRadius: 6,
+        }],
     };
 
-    return <Line options={options} data={chartData} />;
+    return <Line options={options} data={chartData}/>;
 }

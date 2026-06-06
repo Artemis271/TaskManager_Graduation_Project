@@ -1,4 +1,4 @@
-﻿package com.artemis.taskservice.repository;
+package com.artemis.taskservice.repository;
 
 import com.artemis.taskservice.entity.ProcessedEventEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
